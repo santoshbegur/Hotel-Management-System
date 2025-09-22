@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Hotel Management System</title>
+    <link href="/favicon.ico" rel="icon" type="image/x-icon"/>
+    <!-- CSS Styles -->
+    <th:block th:replace="~{fragments/styles :: styles}"></th:block>
+</head>
+<body>
+<div class="login-container">
+    <h3 class="login-title">Hotel Management Login</h3>
+    <form th:action="@{/login}" method="post">
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" value="admin">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" value="admin">
+        </div>
+        <div th:if="${param.error}" class="mb-3">
+            <div class="alert alert-danger" role="alert">
+                Invalid username or password
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+</div>
+
+<!-- Scripts -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

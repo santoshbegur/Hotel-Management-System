@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${user.id == null} ? 'Add User' : 'Edit User'">User Form</title>
+    <!-- CSS Styles -->
+    <th:block th:replace="~{fragments/styles :: styles}"></th:block>
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4" th:text="${user.id == null} ? 'Add User' : 'Edit User'"></h2>
+
+    <form method="post"
+          th:action="@{${user.id == null} ? '/users/users_list/create' : '/users/users_list/update'}" th:object="${user}">
+
+        <div class="mb-3">
+            <label class="form-label" for="username">Username</label>
+            <input class="form-control" id="username" required th:field="*{username}" type="text">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-control" id="email" required th:field="*{email}" type="email">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="passwordHash">Password</label>
+            <input class="form-control" id="passwordHash" required th:field="*{passwordHash}" type="password">
+        </div>
+
+        <button class="btn btn-success" type="submit">Save</button>
+        <a class="btn btn-secondary" th:href="@{/users/users_list}">Back to Users</a>
+    </form>
+</div>
+
+<!-- Scripts -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

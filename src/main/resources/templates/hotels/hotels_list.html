@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotels</title>
+    <link href="/favicon.ico" rel="icon" type="image/x-icon"/>
+    <!-- CSS Styles -->
+    <th:block th:replace="~{fragments/styles :: styles}"></th:block>
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">Hotels</h2>
+
+    <div class="mb-3">
+        <a class="btn btn-primary" th:href="@{/hotels/hotels_list/create}">Add Hotel</a>
+    </div>
+
+    <table id="hotelsTable" class="table table-striped table-bordered table-hover table-sm">
+        <thead class="table-dark dt-head-nowrap">
+        <tr>
+            <th class="nowrap">ID</th>
+            <th class="nowrap">Name</th>
+            <th>Address</th>
+            <th class="nowrap">Phone</th>
+            <th class="nowrap">Timezone</th>
+            <th class="nowrap">Actions</th>
+        </tr>
+        </thead>
+        <tbody class="dt-body-nowrap">
+        <tr th:each="hotel : ${hotels}">
+            <td class="nowrap" th:text="${hotel.id}"></td>
+            <td class="nowrap" th:text="${hotel.name}"></td>
+            <td th:text="${hotel.address}"></td>
+            <td class="nowrap" th:text="${hotel.phone}"></td>
+            <td class="nowrap" th:text="${hotel.timezone}"></td>
+            <td>
+                <a class="btn btn-sm btn-warning" th:href="@{/hotels/hotels_list/edit/{id}(id=${hotel.id})}">Edit</a>
+                <a class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this hotel?');"
+                   th:href="@{/hotels/hotels_list/delete/{id}(id=${hotel.id})}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="mb-3">
+        <a class="btn btn-secondary" th:href="@{/}">Back to Home</a>
+    </div>
+</div>
+
+<!-- JS Scripts -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Housekeeping Form</title>
+    <!-- CSS Styles -->
+    <th:block th:replace="~{fragments/styles :: styles}"></th:block>
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4" th:text="${housekeeping.id == null} ? 'Add Housekeeping Task' : 'Edit Housekeeping Task'"></h2>
+
+    <form class="row g-3"
+          method="post" th:action="@{${housekeeping.id == null} ? '/housekeeping/housekeeping_list/create' : '/housekeeping/housekeeping_list/update'}" th:object="${housekeeping}">
+
+        <div class="col-12">
+            <label class="form-label">Task Description</label>
+            <textarea class="form-control" required th:field="*{taskDescription}"></textarea>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Status</label>
+            <select class="form-select" th:field="*{status}">
+                <option value="PENDING">Pending</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="COMPLETED">Completed</option>
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Staff</label>
+            <select class="form-select" th:field="*{staff.id}">
+                <option th:each="staff : ${staffList}" th:text="${staff.name}" th:value="${staff.id}"></option>
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Hotel</label>
+            <select class="form-select" th:field="*{hotel.id}">
+                <option th:each="hotel : ${hotels}" th:text="${hotel.name}" th:value="${hotel.id}"></option>
+            </select>
+        </div>
+
+        <div class="col-12 d-flex gap-2">
+            <button class="btn btn-success" type="submit">Save</button>
+            <a class="btn btn-secondary" th:href="@{/housekeeping/housekeeping_list}">Back to Housekeeping</a>
+        </div>
+    </form>
+</div>
+
+<!-- Scripts -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

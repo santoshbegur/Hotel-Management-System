@@ -1,0 +1,159 @@
+<!-- fragments/carousel.html -->
+<div th:fragment="carousel">
+    <!-- Carousel Section -->
+    <section class="container-fluid px-0">
+        <div class="carousel slide carousel-fade" data-bs-interval="3000" data-bs-ride="carousel" data-bs-wrap="true"
+             id="hotelCarousel">
+            <!-- Indicators -->
+            <div class="carousel-indicators">
+                <button class="active" data-bs-slide-to="0" data-bs-target="#hotelCarousel" type="button"></button>
+                <button data-bs-slide-to="1" data-bs-target="#hotelCarousel" type="button"></button>
+                <button data-bs-slide-to="2" data-bs-target="#hotelCarousel" type="button"></button>
+                <button data-bs-slide-to="3" data-bs-target="#hotelCarousel" type="button"></button>
+                <button data-bs-slide-to="4" data-bs-target="#hotelCarousel" type="button"></button>
+                <button data-bs-slide-to="5" data-bs-target="#hotelCarousel" type="button"></button>
+                <button data-bs-slide-to="6" data-bs-target="#hotelCarousel" type="button"></button>
+                <button data-bs-slide-to="7" data-bs-target="#hotelCarousel" type="button"></button>
+                <button data-bs-slide-to="8" data-bs-target="#hotelCarousel" type="button"></button>
+                <button data-bs-slide-to="9" data-bs-target="#hotelCarousel" type="button"></button>
+                <button data-bs-slide-to="10" data-bs-target="#hotelCarousel" type="button"></button>
+                <button data-bs-slide-to="11" data-bs-target="#hotelCarousel" type="button"></button>
+            </div>
+
+            <!-- Slides -->
+            <div class="carousel-inner">
+                <!-- 1. Hotel Lobby -->
+                <div class="carousel-item active">
+                    <img alt="Luxury Hotel Lobby"
+                         class="d-block w-100" src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1740&auto=format&fit=crop" style="height: 500px; object-fit: cover;">
+                    <div class="carousel-caption d-none d-md-block rounded p-2"
+                         style="background-color: rgba(0, 0, 0, 0.25);">
+                        <h5>Luxury Hotel Lobby</h5>
+                        <p>Experience elegance and comfort as soon as you arrive.</p>
+                    </div>
+                </div>
+
+                <!-- 2. Infinity Pool -->
+                <div class="carousel-item">
+                    <img alt="Hotel Pool"
+                         class="d-block w-100" src="https://images.unsplash.com/photo-1572331165267-854da2b10ccc?q=80&w=4140&auto=format&fit=crop" style="height: 500px; object-fit: cover;">
+                    <div class="carousel-caption d-none d-md-block rounded p-2"
+                         style="background-color: rgba(0, 0, 0, 0.25);">
+                        <h5>Infinity Pool</h5>
+                        <p>Relax and enjoy stunning poolside views with premium service.</p>
+                    </div>
+                </div>
+
+                <!-- 3. Fine Dining -->
+                <div class="carousel-item">
+                    <img alt="Hotel Restaurant"
+                         class="d-block w-100" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1740&auto=format&fit=crop" style="height: 500px; object-fit: cover;">
+                    <div class="carousel-caption d-none d-md-block rounded p-2"
+                         style="background-color: rgba(0, 0, 0, 0.25);">
+                        <h5>Fine Dining</h5>
+                        <p>Delight in gourmet cuisine at our world-class restaurants.</p>
+                    </div>
+                </div>
+
+                <!-- 4. Latest News -->
+                <div class="carousel-item">
+                    <img alt="Latest News"
+                         class="d-block w-100" src="https://plus.unsplash.com/premium_photo-1726862932006-c6e2f8434266?w=1400&auto=format&fit=crop&q=60" style="height: 500px; object-fit: cover;">
+                    <div class="carousel-caption d-none d-md-block rounded p-2"
+                         style="background-color: rgba(0, 0, 0, 0.25);">
+                        <h5>Latest News</h5>
+                        <p>Stay updated with exciting hotel news, promotions, and travel tips.</p>
+                    </div>
+                </div>
+
+                <!-- 5. Upcoming Events -->
+                <div class="carousel-item">
+                    <img alt="Upcoming Events"
+                         class="d-block w-100" src="https://media.istockphoto.com/id/1263908025/photo/upcoming-events-chalkboard-and-colored-balloons-on-a-wooden-background.jpg?s=1024x1024&w=is&k=20&c=5OCeu_ZlcGXCQaEA4s4qKp4uZMONG48SBFrSXfudb6s=" style="height: 500px; object-fit: cover;">
+                    <div class="carousel-caption d-none d-md-block rounded p-2"
+                         style="background-color: rgba(0, 0, 0, 0.25);">
+                        <h5>Upcoming Events</h5>
+                        <p>Don’t miss workshops, live shows, and special hotel programs.</p>
+                    </div>
+                </div>
+
+                <!-- 6. Guest Feedback -->
+                <div class="carousel-item">
+                    <img alt="Guest Feedback"
+                         class="d-block w-100" src="https://media.istockphoto.com/id/1284007782/photo/customer-satisfaction-survey-feedback-emoji.jpg?s=1024x1024&w=is&k=20&c=cI1eMWl6_IOpimLqhWVyly6N8uSMrZkzXrGPN3crsXA=" style="height: 500px; object-fit: cover;">
+                    <div class="carousel-caption d-none d-md-block rounded p-2"
+                         style="background-color: rgba(0, 0, 0, 0.25);">
+                        <h5>Guest Feedback</h5>
+                        <p>See what our guests have to say about their memorable stay.</p>
+                    </div>
+                </div>
+
+                <!-- 7. Promotions -->
+                <div class="carousel-item">
+                    <img alt="Promotions"
+                         class="d-block w-100" src="https://images.unsplash.com/photo-1512106374988-c95f566d39ef?q=80&w=1160&auto=format&fit=crop" style="height: 500px; object-fit: cover;">
+                    <div class="carousel-caption d-none d-md-block rounded p-2"
+                         style="background-color: rgba(0, 0, 0, 0.25);">
+                        <h5>Exclusive Promotions</h5>
+                        <p>Book early and get 20% off on all rooms and suites this summer!</p>
+                    </div>
+                </div>
+
+                <!-- 8. Dining -->
+                <div class="carousel-item">
+                    <img alt="Dining"
+                         class="d-block w-100" src="https://plus.unsplash.com/premium_photo-1661953124283-76d0a8436b87?q=80&w=1776&auto=format&fit=crop" style="height: 500px; object-fit: cover;">
+                    <div class="carousel-caption d-none d-md-block rounded p-2"
+                         style="background-color: rgba(0, 0, 0, 0.25);">
+                        <h5>In-House Dining</h5>
+                        <p>Savor exquisite cuisines prepared by award-winning chefs.</p>
+                    </div>
+                </div>
+
+                <!-- 9. Spa & Wellness -->
+                <div class="carousel-item">
+                    <img alt="Spa & Wellness"
+                         class="d-block w-100" src="https://plus.unsplash.com/premium_photo-1722686486118-64c4e3649f93?q=80&w=1690&auto=format&fit=crop" style="height: 500px; object-fit: cover;">
+                    <div class="carousel-caption d-none d-md-block rounded p-2"
+                         style="background-color: rgba(0, 0, 0, 0.25);">
+                        <h5>Spa & Wellness</h5>
+                        <p>Rejuvenate with our luxury spa treatments and wellness sessions.</p>
+                    </div>
+                </div>
+
+                <!-- 10. Conference Halls -->
+                <div class="carousel-item">
+                    <img alt="Conference Halls"
+                         class="d-block w-100" src="https://plus.unsplash.com/premium_photo-1679547202918-bf37285d3caf?q=80&w=1740&auto=format&fit=crop" style="height: 500px; object-fit: cover;">
+                    <div class="carousel-caption d-none d-md-block rounded p-2"
+                         style="background-color: rgba(0, 0, 0, 0.25);">
+                        <h5>Conference Halls</h5>
+                        <p>Modern facilities for meetings, conferences, and business events.</p>
+                    </div>
+                </div>
+
+                <!-- 11. Swimming Pool -->
+                <div class="carousel-item">
+                    <img alt="Swimming Pool"
+                         class="d-block w-100" src="https://images.unsplash.com/photo-1572331165267-854da2b10ccc?q=80&w=4140&auto=format&fit=crop" style="height: 500px; object-fit: cover;">
+                    <div class="carousel-caption d-none d-md-block rounded p-2"
+                         style="background-color: rgba(0, 0, 0, 0.25);">
+                        <h5>Swimming Pool</h5>
+                        <p>Enjoy our outdoor pool with relaxing ambiance and poolside service.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <button class="carousel-control-prev" data-bs-slide="prev" data-bs-target="#hotelCarousel" type="button">
+                <span class="carousel-control-prev-icon"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" data-bs-slide="next" data-bs-target="#hotelCarousel" type="button">
+                <span class="carousel-control-next-icon"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </section>
+</div>
+

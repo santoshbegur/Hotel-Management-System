@@ -1,0 +1,124 @@
+<!-- fragments/section_grid.html -->
+<div th:fragment="section_grid">
+    <!-- 3x3 Section Grid -->
+    <section class="container mt-4">
+        <div class="row g-4">
+            <!-- Hotels -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <img alt="Hotels"
+                         class="img-fluid rounded" src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1740&auto=format&fit=crop" style="height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Explore Hotels</h5>
+                        <p class="card-text">Discover our top hotels with luxury amenities, scenic views, and special
+                            offers.</p>
+                        <a class="btn btn-primary" th:href="@{/hotels}">View Hotels</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Latest News -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <img alt="Latest News"
+                         class="img-fluid rounded" src="https://plus.unsplash.com/premium_photo-1726862932006-c6e2f8434266?w=1400&auto=format&fit=crop&q=60" style="height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Latest News</h5>
+                        <p class="card-text">Stay updated with exciting hotel news, promotions, and travel tips for your
+                            next stay.</p>
+                        <a class="btn btn-primary" th:href="@{/news}">Read News</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Upcoming Events -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <img alt="Events"
+                         class="img-fluid rounded" src="https://media.istockphoto.com/id/1263908025/photo/upcoming-events-chalkboard-and-colored-balloons-on-a-wooden-background.jpg?s=1024x1024&w=is&k=20&c=5OCeu_ZlcGXCQaEA4s4qKp4uZMONG48SBFrSXfudb6s=" style="height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Upcoming Events</h5>
+                        <p class="card-text">Check out upcoming hotel events, workshops, and special guest programs you
+                            can't miss.</p>
+                        <a class="btn btn-primary" th:href="@{/events}">View Events</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Guest Feedback -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <img alt="Guest Feedback"
+                         class="img-fluid rounded" src="https://media.istockphoto.com/id/1284007782/photo/customer-satisfaction-survey-feedback-emoji.jpg?s=1024x1024&w=is&k=20&c=cI1eMWl6_IOpimLqhWVyly6N8uSMrZkzXrGPN3crsXA=" style="height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Guest Feedback</h5>
+                        <p class="card-text">Read testimonials and reviews from our valued guests who enjoyed their
+                            stay.</p>
+                        <a class="btn btn-primary" th:href="@{/feedback}">View Feedback</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Promotions -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <img alt="Promotions"
+                         class="img-fluid rounded" src="https://images.unsplash.com/photo-1512106374988-c95f566d39ef?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Exclusive Promotions</h5>
+                        <p class="card-text">Book early and get 20% off on all rooms and suites this summer!</p>
+                        <a class="btn btn-primary" th:href="@{/promotions}">View Promotions</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dining -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <img alt="Dining"
+                         class="img-fluid rounded" src="https://plus.unsplash.com/premium_photo-1661953124283-76d0a8436b87?q=80&w=1776&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Fine Dining</h5>
+                        <p class="card-text">Enjoy exquisite meals prepared by top chefs in our in-house restaurant.</p>
+                        <a class="btn btn-primary" th:href="@{/dining}">View Dining</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Spa & Wellness -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <img alt="Spa"
+                         class="img-fluid rounded" src="https://plus.unsplash.com/premium_photo-1722686486118-64c4e3649f93?q=80&w=1690&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Spa & Wellness</h5>
+                        <p class="card-text">Relax and rejuvenate with our luxurious spa and wellness packages.</p>
+                        <a class="btn btn-primary" th:href="@{/spa}">View Spa</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Conference Halls -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <img alt="Conference"
+                         class="img-fluid rounded" src="https://plus.unsplash.com/premium_photo-1679547202918-bf37285d3caf?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Conference Halls</h5>
+                        <p class="card-text">State-of-the-art facilities for meetings, conferences, and corporate
+                            events.</p>
+                        <a class="btn btn-primary" th:href="@{/conference}">View Halls</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Swimming Pool -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <img alt="Swimming Pool"
+                         class="img-fluid rounded" src="https://images.unsplash.com/photo-1572331165267-854da2b10ccc?q=80&w=4140&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Swimming Pool</h5>
+                        <p class="card-text">Enjoy our outdoor swimming pool with relaxing ambiance and poolside
+                            service.</p>
+                        <a class="btn btn-primary" th:href="@{/pool}">View Pool</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+

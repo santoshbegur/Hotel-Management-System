@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Staff Form</title>
+    <!-- CSS Styles -->
+    <th:block th:replace="~{fragments/styles :: styles}"></th:block>
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4" th:text="${staff.id == null} ? 'Add Staff' : 'Edit Staff'"></h2>
+
+    <form method="post"
+          th:action="@{${staff.id == null} ? '/staffs/staffs_list/create' : '/staffs/staffs_list/update'}" th:object="${staff}">
+
+        <div class="mb-3">
+            <label class="form-label">User</label>
+            <select class="form-select" required th:field="*{user.id}">
+                <option th:each="user : ${users}" th:text="${user.username}" th:value="${user.id}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Role</label>
+            <select class="form-select" required th:field="*{role.id}">
+                <option th:each="role : ${roles}" th:text="${role.name}" th:value="${role.id}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Hotel</label>
+            <select class="form-select" required th:field="*{hotel.id}">
+                <option th:each="hotel : ${hotels}" th:text="${hotel.name}" th:value="${hotel.id}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Joined Date</label>
+            <input class="form-control" required th:field="*{joinedDate}" type="date">
+        </div>
+
+        <button class="btn btn-success" type="submit">Save</button>
+        <a class="btn btn-secondary" th:href="@{/staffs/staffs_list}">Back to Staff</a>
+    </form>
+</div>
+
+<!-- Scripts -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

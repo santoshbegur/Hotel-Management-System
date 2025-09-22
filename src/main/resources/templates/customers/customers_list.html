@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customers</title>
+    <!-- CSS Styles -->
+    <th:block th:replace="~{fragments/styles :: styles}"></th:block>
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">Customers</h2>
+
+    <!-- Action Buttons -->
+    <div class="d-flex justify-content-between mb-3">
+        <a class="btn btn-primary btn-sm" th:href="@{/customers/customers_list/create}">Add Customer</a>
+        <input type="text" class="form-control w-50" placeholder="Search Customers..." id="searchInput" onkeyup="filterTable()">
+    </div>
+
+    <!-- Error / Success Messages -->
+    <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+    <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+
+    <!-- Responsive Table -->
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover table-sm">
+            <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="customer : ${customers}">
+                <td th:text="${customer.id}"></td>
+                <td th:text="${customer.firstName}"></td>
+                <td th:text="${customer.lastName}"></td>
+                <td th:text="${customer.email}"></td>
+                <td th:text="${customer.phone}"></td>
+                <td>
+                    <a class="btn btn-sm btn-warning" th:href="@{/customers/customers_list/edit/{id}(id=${customer.id})}">Edit</a>
+                    <a class="btn btn-sm btn-danger"
+                       onclick="return confirm('Are you sure you want to delete this customer?');"
+                       th:href="@{/customers/customers_list/delete/{id}(id=${customer.id})}">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mb-3">
+        <a class="btn btn-secondary btn-sm" th:href="@{/}">Back to Home</a>
+    </div>
+</div>
+
+<!-- Search Filter Script -->
+<script>
+    function filterTable() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let rows = document.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            row.style.display = Array.from(row.cells).some(cell =>
+                cell.textContent.toLowerCase().includes(input)
+            ) ? '' : 'none';
+        });
+    }
+</script>
+
+<!-- Scripts -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

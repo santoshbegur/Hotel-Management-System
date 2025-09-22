@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${customer.id == null} ? 'Add Customer' : 'Edit Customer'">Customer Form</title>
+    <!-- CSS Styles -->
+    <th:block th:replace="~{fragments/styles :: styles}"></th:block>
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4" th:text="${customer.id == null} ? 'Add Customer' : 'Edit Customer'"></h2>
+
+    <form th:object="${customer}"
+          th:action="@{${customer.id == null} ? '/customers/customers_list/create' : '/customers/customers_list/update/' + ${customer.id}}"
+          method="post">
+
+        <div class="mb-3">
+            <label class="form-label" for="firstName">First Name</label>
+            <input id="firstName" class="form-control" type="text" th:field="*{firstName}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="lastName">Last Name</label>
+            <input id="lastName" class="form-control" type="text" th:field="*{lastName}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="email">Email</label>
+            <input id="email" class="form-control" type="email" th:field="*{email}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="phone">Phone</label>
+            <input id="phone" class="form-control" type="text" th:field="*{phone}">
+        </div>
+
+        <button type="submit" class="btn btn-success">Save</button>
+        <a th:href="@{/customers/customers_list}" class="btn btn-secondary">Back to Customers</a>
+    </form>
+</div>
+
+<!-- Scripts -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

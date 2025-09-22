@@ -1,0 +1,25 @@
+/* Global font size */
+body {
+    font-size: 0.9rem;
+}
+
+/* Table font size and cell padding */
+table.table {
+    font-size: 0.85rem;
+}
+
+table.table th,
+table.table td {
+    padding: 0.25rem 0.5rem;
+}
+
+/* Container width */
+.container {
+    max-width: 900px;
+}
+
+/* Small buttons everywhere */
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}

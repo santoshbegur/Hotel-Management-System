@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${payment.id != null} ? 'Edit Payment' : 'Add Payment'">Payment Form</title>
+    <link href="/favicon.ico" rel="icon" type="image/x-icon"/>
+    <!-- CSS Styles -->
+    <th:block th:replace="~{fragments/styles :: styles}"></th:block>
+</head>
+<body>
+<div class="container mt-5">
+    <h2 th:text="${payment.id != null} ? 'Edit Payment' : 'Add Payment'"></h2>
+    <form method="post" th:action="@{/payments/payments_list/save}" th:object="${payment}">
+
+        <div class="mb-3">
+            <label class="form-label" for="reservation">Reservation</label>
+            <select class="form-select" id="reservation" required th:field="*{reservation}">
+                <option th:each="res : ${reservations}" th:text="${res.id} + ' - ' + ${res.customerName}"
+                        th:value="${res}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="amount">Amount</label>
+            <input class="form-control" id="amount" required step="0.01" th:field="*{amount}" type="number">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="currency">Currency</label>
+            <input class="form-control" id="currency" placeholder="INR" required th:field="*{currency}" type="text">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="method">Payment Method</label>
+            <select class="form-select" id="method" th:field="*{method}">
+                <option value="CARD">Card</option>
+                <option value="UPI">UPI</option>
+                <option value="CASH">Cash</option>
+                <option value="NETBANKING">Net Banking</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="status">Status</label>
+            <select class="form-select" id="status" th:field="*{status}">
+                <option value="PENDING">Pending</option>
+                <option value="PAID">Paid</option>
+                <option value="FAILED">Failed</option>
+                <option value="REFUNDED">Refunded</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="transactionId">Transaction ID</label>
+            <input class="form-control" id="transactionId" th:field="*{transactionId}" type="text">
+        </div>
+
+        <button class="btn btn-success" type="submit">Save</button>
+        <a class="btn btn-secondary" th:href="@{/payments/payments_list}">Cancel</a>
+    </form>
+</div>
+<!-- Scripts -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

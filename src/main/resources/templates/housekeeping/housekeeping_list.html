@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Housekeeping</title>
+    <!-- CSS Styles -->
+    <th:block th:replace="~{fragments/styles :: styles}"></th:block>
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">Housekeeping</h2>
+
+    <!-- Update Room Status Form -->
+    <form class="row g-3 mb-4" method="post" th:action="@{/housekeeping/update}">
+        <div class="col-md-3">
+            <label class="form-label">Room Number</label>
+            <input class="form-control" name="roomNumber" required type="number">
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Status</label>
+            <select class="form-select" name="status">
+                <option value="CLEAN">Clean</option>
+                <option value="DIRTY">Dirty</option>
+                <option value="MAINTENANCE">Under Maintenance</option>
+            </select>
+        </div>
+
+        <div class="col-md-3 d-flex align-items-end">
+            <button class="btn btn-success" type="submit">Update</button>
+        </div>
+    </form>
+
+    <!-- Room Status List -->
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>Room Number</th>
+            <th>Status</th>
+            <th>Last Cleaned</th>
+            <th>Assigned Staff</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="room : ${housekeepingList}">
+            <td th:text="${room.roomNumber}"></td>
+            <td th:text="${room.status}"></td>
+            <td th:text="${room.lastCleaned}"></td>
+            <td th:text="${room.staffName}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-secondary mt-3" th:href="@{/}">Back to Home</a>
+</div>
+
+<!-- Scripts -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>
