@@ -10,7 +10,7 @@
 <div class="container mt-5">
     <h2 th:text="${reservation.id} != null ? 'Edit Reservation' : 'New Reservation'"></h2>
     <form th:object="${reservation}" method="post"
-          th:action="${reservation.id} != null ? @{/reservations/reservations_list/update/{id}(id=${reservation.id})} : @{/reservations/create}">
+          th:action="${reservation.id} != null ? @{/reservations/reservations_list/update/{id}(id=${reservation.id})} : @{/reservations/reservations_list/create}">
         <!-- Hidden ID -->
         <input type="hidden" th:field="*{id}"/>
         <!-- Customer Dropdown -->
