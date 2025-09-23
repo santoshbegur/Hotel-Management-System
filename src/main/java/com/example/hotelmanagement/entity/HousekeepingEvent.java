@@ -20,16 +20,26 @@ public class HousekeepingEvent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Task status: PENDING, IN_PROGRESS, COMPLETED
+    @Column(nullable = false)
     private String status;
 
+    // Timestamp when the task was reported/created
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime reportedAt;
-
+    // Link to Room (Room already contains Hotel)
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
-
+    // Staff assigned to this housekeeping task
     @ManyToOne
     @JoinColumn(name = "handled_by")
     private Staff handledBy;
+
+    @PrePersist
+    public void prePersist() {
+        if (reportedAt == null) {
+            reportedAt = LocalDateTime.now();
+        }
+    }
 }

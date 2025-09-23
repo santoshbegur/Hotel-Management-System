@@ -3,52 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <title>Housekeeping Form</title>
+    <link href="/favicon.ico" rel="icon" type="image/x-icon"/>
     <!-- CSS Styles -->
     <th:block th:replace="~{fragments/styles :: styles}"></th:block>
 </head>
-<body>
+<body class="bg-light">
 <div class="container mt-5">
-    <h2 class="mb-4" th:text="${housekeeping.id == null} ? 'Add Housekeeping Task' : 'Edit Housekeeping Task'"></h2>
 
-    <form class="row g-3"
-          method="post" th:action="@{${housekeeping.id == null} ? '/housekeeping/housekeeping_list/create' : '/housekeeping/housekeeping_list/update'}" th:object="${housekeeping}">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary"
+            th:text="${housekeepingEvent.id == null} ? 'Add Housekeeping Task' : 'Edit Housekeeping Task'"></h2>
+        <a class="btn btn-outline-secondary" th:href="@{/housekeeping/housekeeping_list}">Back to List</a>
+    </div>
 
-        <div class="col-12">
-            <label class="form-label">Task Description</label>
-            <textarea class="form-control" required th:field="*{taskDescription}"></textarea>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form class="row g-3"
+                  method="post" th:action="@{${housekeepingEvent.id} == null ? '/housekeeping/housekeeping_list/create' : '/housekeeping/housekeeping_list/update/' + ${housekeepingEvent.id}}" th:object="${housekeepingEvent}">
+
+                <!-- Room -->
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Room</label>
+                    <select class="form-select" required th:field="*{room.id}">
+                        <option disabled value="">Select Room (Hotel info included)</option>
+                        <option th:disabled="${#lists.contains(activeRoomIds, room.id)}"
+                                th:each="room : ${rooms}"
+                                th:text="${room.hotel.name + ' - ' + room.roomNumber}"
+                                th:value="${room.id}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Status -->
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Status</label>
+                    <select class="form-select" required th:field="*{status}">
+                        <option disabled value="">Select Status</option>
+                        <option value="PENDING">Pending</option>
+                        <option value="IN_PROGRESS">In Progress</option>
+                        <option value="COMPLETED">Completed</option>
+                    </select>
+                </div>
+
+                <!-- Staff -->
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Assign Staff</label>
+                    <select class="form-select" th:field="*{handledBy.id}">
+                        <option disabled value="">Select Staff</option>
+                        <option th:each="staff : ${staffList}"
+                                th:text="${staff.user.username}"
+                                th:value="${staff.id}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-12 d-flex gap-2 mt-3">
+                    <button class="btn btn-success" th:text="${housekeepingEvent.id == null} ? 'Save Task' : 'Update Task'"
+                            type="submit"></button>
+                    <a class="btn btn-secondary" th:href="@{/housekeeping/housekeeping_list}">Cancel</a>
+                </div>
+            </form>
         </div>
-
-        <div class="col-md-4">
-            <label class="form-label">Status</label>
-            <select class="form-select" th:field="*{status}">
-                <option value="PENDING">Pending</option>
-                <option value="IN_PROGRESS">In Progress</option>
-                <option value="COMPLETED">Completed</option>
-            </select>
-        </div>
-
-        <div class="col-md-4">
-            <label class="form-label">Staff</label>
-            <select class="form-select" th:field="*{staff.id}">
-                <option th:each="staff : ${staffList}" th:text="${staff.name}" th:value="${staff.id}"></option>
-            </select>
-        </div>
-
-        <div class="col-md-4">
-            <label class="form-label">Hotel</label>
-            <select class="form-select" th:field="*{hotel.id}">
-                <option th:each="hotel : ${hotels}" th:text="${hotel.name}" th:value="${hotel.id}"></option>
-            </select>
-        </div>
-
-        <div class="col-12 d-flex gap-2">
-            <button class="btn btn-success" type="submit">Save</button>
-            <a class="btn btn-secondary" th:href="@{/housekeeping/housekeeping_list}">Back to Housekeeping</a>
-        </div>
-    </form>
+    </div>
 </div>
-
-<!-- Scripts -->
+<!-- JS Scripts -->
 <th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
 </body>
 </html>
