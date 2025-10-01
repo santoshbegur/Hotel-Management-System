@@ -1,28 +1,17 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Customers</title>
-    <!-- CSS Styles -->
-    <th:block th:replace="~{fragments/styles :: styles}"></th:block>
-</head>
-<body>
-<div class="container mt-5">
-    <h2 class="mb-4">Customers</h2>
+<div th:fragment="customersList">
+    <div class="container mt-1" id="customersContent">
+        <h2 class="mb-2">Customers</h2>
 
-    <!-- Action Buttons -->
-    <div class="d-flex justify-content-between mb-3">
-        <a class="btn btn-primary btn-sm" th:href="@{/customers/customers_list/create}">Add Customer</a>
-        <input type="text" class="form-control w-50" placeholder="Search Customers..." id="searchInput" onkeyup="filterTable()">
-    </div>
+        <div class="mb-1">
+            <button class="btn btn-primary btn-sm" th:onclick="'loadForm(\'customers\')'">
+                <i class="bi bi-plus-circle"></i> Add Customer
+            </button>
+        </div>
 
-    <!-- Error / Success Messages -->
-    <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
-    <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+        <!-- Bootstrap alert container -->
+        <div class="mt-3" id="alertContainer"></div>
 
-    <!-- Responsive Table -->
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered table-hover table-sm">
+        <table class="table table-striped table-bordered table-hover table-sm data-table">
             <thead class="table-dark">
             <tr>
                 <th>ID</th>
@@ -30,7 +19,7 @@
                 <th>Last Name</th>
                 <th>Email</th>
                 <th>Phone</th>
-                <th>Actions</th>
+                <th class="actions">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -41,35 +30,17 @@
                 <td th:text="${customer.email}"></td>
                 <td th:text="${customer.phone}"></td>
                 <td>
-                    <a class="btn btn-sm btn-warning" th:href="@{/customers/customers_list/edit/{id}(id=${customer.id})}">Edit</a>
+                    <a class="btn btn-sm btn-warning" href="#"
+                       th:onclick="'loadForm(\'customers\', ' + ${customer.id} + ')'">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </a>
                     <a class="btn btn-sm btn-danger"
-                       onclick="return confirm('Are you sure you want to delete this customer?');"
-                       th:href="@{/customers/customers_list/delete/{id}(id=${customer.id})}">Delete</a>
+                       th:onclick="'deleteItem(\'customers\', ' + ${customer.id} + ')'">
+                        <i class="bi bi-trash"></i>Delete
+                    </a>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
-
-    <div class="mb-3">
-        <a class="btn btn-secondary btn-sm" th:href="@{/}">Back to Home</a>
-    </div>
 </div>
-
-<!-- Search Filter Script -->
-<script>
-    function filterTable() {
-        let input = document.getElementById('searchInput').value.toLowerCase();
-        let rows = document.querySelectorAll('tbody tr');
-        rows.forEach(row => {
-            row.style.display = Array.from(row.cells).some(cell =>
-                cell.textContent.toLowerCase().includes(input)
-            ) ? '' : 'none';
-        });
-    }
-</script>
-
-<!-- Scripts -->
-<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
-</body>
-</html>

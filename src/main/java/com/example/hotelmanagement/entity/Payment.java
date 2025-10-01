@@ -25,6 +25,7 @@ public class Payment {
     private String currency;
     private String method;
     private String status;
+    @Column(name = "transaction_id", unique = true, nullable = false)
     private String transactionId;
 
     @ManyToOne

@@ -3,10 +3,15 @@ package com.example.hotelmanagement.controller;
 import com.example.hotelmanagement.entity.Payment;
 import com.example.hotelmanagement.service.PaymentService;
 import com.example.hotelmanagement.service.ReservationService;
+import com.example.hotelmanagement.util.TransactionIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/payments/payments_list")
@@ -18,35 +23,69 @@ public class PaymentController {
     @Autowired
     private ReservationService reservationService;
 
+    // ✅ List payments
     @GetMapping
     public String listPayments(Model model) {
         model.addAttribute("payments", paymentService.getAllPayments());
-        return "payments/payments_list";
+        return "payments/payments_list";  // list fragment
     }
 
-    @GetMapping("/new")
+    // ✅ Show create payment form
+    @GetMapping("/create")
     public String createPaymentForm(Model model) {
-        model.addAttribute("payments", new Payment());
+        model.addAttribute("payment", new Payment());   // singular (not "payments")
         model.addAttribute("reservations", reservationService.getAllReservations());
-        return "payments/payments_list";
+        return "payments/payments_form";  // should load form fragment
     }
 
-    @GetMapping("/edit/{id}")
-    public String editPaymentForm(@PathVariable Long id, Model model) {
-        model.addAttribute("payments", paymentService.getPaymentById(id));
-        model.addAttribute("reservations", reservationService.getAllReservations());
-        return "payments/payments_form";
-    }
-
-    @PostMapping("/save")
-    public String savePayment(@ModelAttribute("payments") Payment payment) {
+    // ✅ Save or update payment
+    @PostMapping("/create")
+    public String savePayment(@ModelAttribute("payment") Payment payment) {
+        // Only generate transaction ID if it's a new payment
+        if (payment.getId() == null || payment.getTransactionId() == null) {
+            String txnId = TransactionIdGenerator.generateTransactionId(payment);
+            payment.setTransactionId(txnId);
+        }
+        // save payment
         paymentService.savePayment(payment);
         return "redirect:/payments/payments_list";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deletePayment(@PathVariable Long id) {
-        paymentService.deletePayment(id);
+    // ✅ Show edit payment form
+    @GetMapping("/edit/{id}")
+    public String editPaymentForm(@PathVariable Long id, Model model) {
+        Payment payment = paymentService.getPaymentById(id);
+        if (payment == null) {
+            throw new IllegalArgumentException("Invalid payment ID: " + id);
+        }
+        model.addAttribute("payment", payment);
+        model.addAttribute("reservations", reservationService.getAllReservations());
+        return "payments/payments_form";
+    }
+
+    @PostMapping("/update")
+    public String updatePayment(@ModelAttribute Payment payment, RedirectAttributes redirectAttributes) {
+        // Optional: regenerate transaction ID only if missing
+        if (payment.getTransactionId() == null) {
+            payment.setTransactionId(TransactionIdGenerator.generateTransactionId(payment));
+        }
+
+        paymentService.savePayment(payment);
+        redirectAttributes.addFlashAttribute("success", "Payment updated successfully!");
         return "redirect:/payments/payments_list";
+    }
+
+    // ✅ Delete payment
+    @DeleteMapping("/delete/{id}")
+    @ResponseBody
+    public ResponseEntity<Void> deletePayment(@PathVariable Long id) {
+        try {
+            paymentService.deletePayment(id);
+            return ResponseEntity.ok().build(); // 200 OK
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build(); // 409 Conflict
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

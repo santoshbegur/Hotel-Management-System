@@ -2,20 +2,36 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
     <head>
         <meta charset="UTF-8">
+        <link id="themeStylesheet" rel="stylesheet" th:href="@{/css/theme-blue.css}">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <link href="/favicon.ico" rel="icon" type="image/x-icon">
         <title>Hotel Management System</title>
-        <link href="/favicon.ico" rel="icon" type="image/x-icon"/>
-        <!-- CSS Styles -->
+
+        <!-- Common CSS -->
         <th:block th:replace="~{fragments/styles :: styles}"></th:block>
     </head>
     <body>
-    <!-- Navigation Bar Header -->
+    <!-- Header & Navigation -->
         <th:block th:replace="~{fragments/header :: header}"></th:block>
-        <!-- Carousel -->
+
+    <!-- Confirmation Modal -->
+    <div th:replace="~{fragments/modal :: confirmModal}"></div>
+
+    <!-- Home Content Section -->
+    <div id="homeContent">
         <th:block th:replace="~{fragments/carousel :: carousel}"></th:block>
-        <!-- 3x3 Section Grid -->
         <th:block th:replace="~{fragments/section_grid :: section_grid}"></th:block>
-        <!-- Footer -->
+    </div>
+
+    <!-- Bootstrap alert container -->
+    <div class="mt-3" id="alertContainer"></div>
+
+    <!-- Dynamic Section -->
+    <div id="content"></div>
+
+    <!-- Footer -->
         <th:block th:replace="~{fragments/footer :: footer}"></th:block>
+
     <!-- JS Scripts -->
         <th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
     </body>

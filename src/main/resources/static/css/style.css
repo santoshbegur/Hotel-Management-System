@@ -1,25 +1,523 @@
-/* Global font size */
-body {
+/* =========================================================
+   Global Resets & Layout
+========================================================= */
+/* Import Google Font */
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
     font-size: 0.9rem;
+    background-color: #f8f9fa;
 }
 
-/* Table font size and cell padding */
-table.table {
+/* Flexbox layout for sticky footer */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* ensures body is at least full screen */
+}
+
+/* Main content area grows to fill space between header and footer */
+#content, #homeContent {
+    flex: 1; /* grows to fill remaining space */
+}
+
+/* =========================================================
+   Header & Navbar
+========================================================= */
+/* Header and Navbar styles */
+header, .navbar {
+    background-color: #007BFF;
+}
+
+/* Navbar links */
+.navbar .nav-link,
+.navbar-brand {
+    color: #ffffff !important;
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   Footer (Sticky)
+========================================================= */
+/* Footer styles */
+footer {
+    background-color: #007BFF;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+/* Sticky footer styles */
+footer.visible {
+    transform: translateY(0);
+}
+
+/* Footer link styles */
+footer a {
+    color: #e2e6ea;
+    text-decoration: none;
+}
+
+/* Footer link hover effect */
+footer a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+/* Footer text styles */
+/* =========================================================
+   Containers
+========================================================= */
+/* Main container */
+.container {
+    max-width: 900px;
+}
+
+/* Form container */
+.form-container {
+    max-width: 600px;
+    margin: 10px auto;
+    padding: 15px 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Form container header */
+.form-container h2 {
+    margin-top: 0 !important;
+    margin-bottom: 0.75rem !important;
+    font-size: 1.5rem;
+    text-align: center;
+    color: #007BFF;
+}
+
+/* Padding inside form container */
+.form-container-padding {
+    margin-top: 10px;
+    padding: 10px;
+}
+
+/* Form row & spacing */
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+/* Ensure inputs in a row share space equally */
+.form-row > div {
+    flex: 1;
+    min-width: 120px;
+}
+
+/* =========================================================
+   Inputs, Selects & Text areas
+========================================================= */
+/* Common styles for inputs, selects, and text areas */
+.form-control,
+.form-select,
+textarea {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Textarea specific styles */
+textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+/* Focus state for inputs, selects, and text areas */
+.form-control:focus,
+.form-select:focus,
+textarea:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+    outline: none;
+}
+
+/* Labels for form elements */
+.form-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: black;
+}
+
+/* Reduce vertical spacing for form elements */
+.form-container .mb-2 {
+    margin-bottom: 0.5rem !important;
+}
+
+/* Compact select/input height */
+.form-container input.form-control,
+.form-container select.form-select {
+    height: 38px;
+    font-size: 0.9rem;
+    padding: 0.35rem 0.5rem;
+}
+
+/* Smaller textarea */
+.form-container textarea.form-control {
+    font-size: 0.9rem;
+    padding: 0.35rem 0.5rem;
+}
+
+/* Buttons inside forms */
+.form-container .d-flex.gap-2 {
+    justify-content: flex-start;
+    margin-top: 0.75rem;
+}
+
+/* =========================================================
+   Buttons
+========================================================= */
+/* Common button styles */
+.btn,
+.btn-sm {
+    font-size: 0.8rem;
+    padding: 5px 12px;
+    border-radius: 6px;
+}
+
+/* Primary button styles */
+.btn-primary {
+    background-color: #007BFF;
+    border-color: #007BFF;
+}
+
+/* Primary button hover effect */
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+/* Secondary button styles */
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+/* Secondary button hover effect */
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #5a6268;
+}
+
+/* Success button styles */
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+/* Success button hover effect */
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+/* Warning button styles */
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+/* Warning button hover effect */
+.btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+
+/* Danger button styles */
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Danger button hover effect */
+.btn-danger:hover {
+    background-color: #bd2130;
+    border-color: #b21f2d;
+}
+
+/* =========================================================
+   Alerts
+========================================================= */
+/* Alert container */
+#alertContainer {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* =========================================================
+   Tables
+========================================================= */
+/* Table styles */
+table.table,
+table.dataTable {
     font-size: 0.85rem;
 }
 
+/* Reduce padding in table cells */
 table.table th,
 table.table td {
     padding: 0.25rem 0.5rem;
 }
 
-/* Container width */
-.container {
-    max-width: 900px;
+/* Compact button styles inside tables */
+.table .btn {
+    padding: 3px 8px;
+    font-size: 0.75rem;
 }
 
-/* Small buttons everywhere */
-.btn-sm {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.8rem;
+/* =========================================================
+   Cards & Status Badges
+========================================================= */
+/* Hotel card styles */
+.hotel-card {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+
+/* Hotel card title */
+.hotel-card .actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Room status badges */
+.room-status {
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-align: center;
+    color: #fff;
+}
+
+/* Room status colors */
+.room-status.available {
+    background-color: #28a745;
+}
+
+/* Yellow for booked */
+.room-status.booked {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+/* Red for occupied */
+.room-status.occupied {
+    background-color: #dc3545;
+}
+
+/* Reservation status badges */
+.reservation-status {
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-align: center;
+    color: #fff;
+}
+
+/* Reservation status colors */
+.reservation-status.CHECKED_IN {
+    background-color: #28a745;
+}
+
+/* Gray for checked out */
+.reservation-status.CHECKED_OUT {
+    background-color: #6c757d;
+}
+
+/* Yellow for pending */
+.reservation-status.PENDING {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+/* Red for cancelled */
+.reservation-status.CANCELLED {
+    background-color: #dc3545;
+}
+
+/* =========================================================
+   Table Action Buttons
+========================================================= */
+/* Action buttons container */
+td.d-flex {
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0.15rem 0.3rem;
+}
+
+/* Ensure action columns have enough width */
+th.actions, td.d-flex {
+    min-width: 100px;
+}
+
+/* Compact button styles inside action columns */
+td.d-flex > .btn {
+    font-size: 0.65rem;
+    height: 24px;
+    padding: 2px 6px;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+/* Icon size inside action buttons */
+td.d-flex > .btn i {
+    font-size: 0.75rem;
+    vertical-align: middle;
+}
+
+/* Spacing between multiple buttons */
+td.d-flex > .btn + .btn {
+    margin-left: 2px;
+}
+
+/* =========================================================
+   Responsive Design
+========================================================= */
+/* Responsive table container */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.navbar-brand {
+    padding: 0 80px; /* top/bottom: 1px, left/right: 30px */
+    font-size: 1.2rem; /* optional: increase font size */
+    font-weight: 300; /* optional: make it bolder */
+}
+
+
+/* =========================================================
+   Theme Selection
+========================================================= */
+.theme-selector-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.theme-selector-wrapper label {
+    color: #f8f9fa; /* light color for dark navbar */
+    font-weight: 500;
+    margin-bottom: 0; /* align with select */
+}
+
+.theme-selector-wrapper select {
+    height: 28px;
+    font-size: 0.85rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: 100px;
+}
+
+.custom-navbar {
+    background-color: var(--navbar-bg) !important;
+    color: var(--text-color);
+}
+
+.theme-label {
+    color: var(--text-color); /* Will automatically follow current theme */
+    background-color: var(--navbar-bg) !important;
+}
+
+#themeSelector {
+    color: black !important;
+    background-color: white !important; /* optional: ensures good contrast */
+    border: 1px solid var(--input-border);
+}
+
+/* Optional: style the dropdown arrow to match theme */
+#themeSelector option {
+    color: black !important;
+    background-color: white !important;
+}
+
+/* Default: Light theme header/footer text */
+body.light-theme header,
+body.light-theme footer {
+    color: black !important;
+}
+
+body.light-theme header .nav-link,
+body.light-theme footer .nav-link {
+    color: black !important;
+}
+
+/* Dark theme header/footer text */
+body.dark-theme header,
+body.dark-theme footer {
+    color: #ffffff !important;
+}
+
+body.dark-theme header .nav-link,
+body.dark-theme footer .nav-link {
+    color: #ffffff !important;
+}
+
+/* Navbar link hover effect (keep same for both themes) */
+.navbar .nav-link:hover {
+    color: #dbe9ff !important;
+}
+
+.nav-click.active {
+    background-color: rgba(255, 255, 255, 0.50); /* slightly darker */
+    color: #ffffff;
+    font-weight: bold;
+    border-bottom: 2px solid #ffffff;
+    border-radius: 4px;
+}
+
+/* =========================================================
+   Number Input Spin Button Removal
+========================================================= */
+/* Chrome, Safari, Edge, Opera */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* =========================================================
+   Table Column Widths & Text Truncation
+========================================================= */
+/* Set fixed layout for hotels table to respect column widths */
+#hotelsTable {
+    table-layout: fixed;
+    /* Remove width:100% to prevent stretching */
+    border-collapse: collapse;
+}
+
+/* Ensure text in table cells truncates with ellipsis */
+#hotelsTable th,
+#hotelsTable td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+

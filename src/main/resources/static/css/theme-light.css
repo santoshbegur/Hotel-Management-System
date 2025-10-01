@@ -1,0 +1,29 @@
+:root {
+    /* Main page content colors (not affecting header/footer) */
+    --bg-color: #f4f5f7; /* Soft light gray background */
+    --text-color: #121212; /* Dark text for page content */
+
+    /* Navbar/Footer specific colors */
+    --navbar-bg: #e9ecef; /* Light gray navbar */
+    --footer-bg: #e9ecef; /* Light gray footer */
+    --navbar-text: #121212; /* Dark navbar text */
+    --footer-text: #121212; /* Dark footer text */
+
+
+    /* Links and buttons */
+    --link-color: #0d6efd;
+    --link-hover: #0b5ed7;
+    --button-bg: #0d6efd;
+    --button-hover-bg: #0b5ed7;
+    --button-text: #ffffff;
+
+    /* Inputs */
+    --input-bg: #ffffff;
+    --input-text: #121212;
+    --input-border: #ced4da;
+}
+
+footer, .app-footer {
+    background-color: var(--footer-bg);
+    color: var(--footer-text);
+}

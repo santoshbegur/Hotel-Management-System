@@ -1,0 +1,22 @@
+<!-- fragments/modal.html -->
+<div th:fragment="confirmModal">
+    <!-- Confirm Modal Fragment -->
+    <div aria-hidden="true" aria-labelledby="confirmModalLabel" class="modal fade" id="confirmModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Confirm Action</h5>
+                    <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                </div>
+                <div class="modal-body" id="confirmMessage">
+                    <!-- Message will be injected dynamically -->
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+                    <button class="btn" id="confirmOkBtn" type="button">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

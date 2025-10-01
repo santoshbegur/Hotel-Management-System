@@ -1,0 +1,34 @@
+/* Description: Custom Light Theme with Blue Accents for Navbar and Footer */
+:root {
+    /* Main page background */
+    --bg-color: #f8f9fa; /* Light gray background for content */
+
+    /* Default text color for readability */
+    --text-color: #ffffff; /* Dark gray text for good contrast */
+
+    /* Navbar styling */
+    --navbar-bg: #0d6efd; /* Bootstrap primary blue */
+    --navbar-text: #ffffff; /* White text for navbar links */
+
+    /* Footer styling */
+    --footer-bg: #0d6efd; /* Same primary blue as navbar */
+    --footer-text: #ffffff; /* White footer text */
+
+    /* Accent colors for links and buttons */
+    --link-color: #0d6efd; /* Blue links to match navbar */
+    --button-bg: #0d6efd; /* Primary button background */
+    --button-text: #ffffff; /* Button text color */
+
+    /* Input fields */
+    --input-bg: #ffffff; /* White input background */
+    --input-text: #212529; /* Dark text inside inputs */
+    --input-border: #ced4da; /* Soft gray border for inputs */
+}
+
+/* ================================
+   Footer Styling
+================================= */
+footer, .app-footer {
+    background-color: var(--footer-bg);
+    color: var(--text-color);
+}

@@ -1,0 +1,27 @@
+/* Dark theme CSS for the web application */
+:root {
+    /* Background color for the main page content */
+    --bg-color: #121212; /* Very dark gray / almost black background */
+    /* Default text color for the page */
+    --text-color: #f8f9fa; /* Light gray / almost white text */
+    /* Navbar background color */
+    --navbar-bg: #1f1f1f; /* Dark gray navbar */
+    /* Footer background color */
+    --footer-bg: #1f1f1f; /* Dark gray footer, same as navbar */
+
+    /* Links and buttons */
+    --link-color: #0d6efd; /* Bright blue for contrast */
+    --button-bg: #0d6efd; /* Primary button background */
+    --button-text: #ffffff; /* Button text color */
+    --input-bg: #1f1f1f; /* Input background dark */
+    --input-text: #f8f9fa; /* Input text light */
+    --input-border: #343a40; /* Input border dark gray */
+}
+
+/* ================================
+   Footer Styling
+================================= */
+footer, .app-footer {
+    background-color: var(--footer-bg);
+    color: var(--text-color);
+}

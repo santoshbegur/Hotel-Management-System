@@ -6,10 +6,15 @@ import com.example.hotelmanagement.repository.HotelRepository;
 import com.example.hotelmanagement.repository.ReservationRepository;
 import com.example.hotelmanagement.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -51,8 +56,11 @@ public class ReservationController {
     // Show edit form
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        Reservation reservation = reservationRepository.findById(id)
+        Reservation reservation = reservationRepository.getReservationById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid reservation Id:" + id));
+        if (reservation == null) {
+            throw new IllegalArgumentException("Invalid reservation ID: " + id);
+        }
         model.addAttribute("reservation", reservation);
         model.addAttribute("customers", customerRepository.findAll());
         model.addAttribute("hotels", hotelRepository.findAll());
@@ -61,17 +69,47 @@ public class ReservationController {
 
 
     // Handle update
-    @PostMapping("/update/{id}")
-    public String updateReservation(@PathVariable Long id, @ModelAttribute Reservation reservation) {
-        reservation.setId(id); // ensure correct ID
+    @PostMapping("/update")
+    public String updateReservation(@ModelAttribute Reservation reservation,
+                                    RedirectAttributes redirectAttributes) {
+
+        // Null-safe handling
+        if (reservation.getReservationLines() == null) {
+            reservation.setReservationLines(new ArrayList<>());
+        }
+
+        // Example duplicate booking check
+        boolean exists = reservationRepository
+                .findOverlappingReservation(
+                        reservation.getHotel(),
+                        reservation.getCheckInDate(),
+                        reservation.getCheckOutDate(),
+                        reservation.getId()
+                ).isPresent();
+
+        if (exists) {
+            redirectAttributes.addFlashAttribute("error",
+                    "A reservation already exists for this hotel with the same dates!");
+            return "redirect:/reservations/edit/" + reservation.getId();
+        }
+
         reservationRepository.save(reservation);
         return "redirect:/reservations/reservations_list";
     }
 
+
     // Delete reservation
-    @GetMapping("/delete/{id}")
-    public String deleteReservation(@PathVariable Long id) {
-        reservationRepository.deleteById(id);
-        return "redirect:/reservations/reservations_list";
+    @DeleteMapping("/delete/{id}")
+    @ResponseBody
+    public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {
+        try {
+            reservationRepository.deleteById(id);
+            return ResponseEntity.ok().build(); // 200 OK on success
+        } catch (DataIntegrityViolationException e) {
+            // return 409 Conflict
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

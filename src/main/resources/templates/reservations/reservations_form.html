@@ -1,70 +1,85 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title th:text="${reservation.id} != null ? 'Edit Reservation' : 'New Reservation'">Reservation</title>
-    <!-- CSS Styles -->
-    <th:block th:replace="~{fragments/styles :: styles}"></th:block>
-</head>
-<body>
-<div class="container mt-5">
-    <h2 th:text="${reservation.id} != null ? 'Edit Reservation' : 'New Reservation'"></h2>
-    <form th:object="${reservation}" method="post"
-          th:action="${reservation.id} != null ? @{/reservations/reservations_list/update/{id}(id=${reservation.id})} : @{/reservations/reservations_list/create}">
-        <!-- Hidden ID -->
-        <input type="hidden" th:field="*{id}"/>
-        <!-- Customer Dropdown -->
-        <div class="mb-3">
-            <label for="customer" class="form-label">Customer</label>
-            <select id="customer" class="form-select" th:field="*{customer.id}">
-                <option th:each="c : ${customers}"
-                        th:value="${c.id}"
-                        th:text="${c.firstName + ' ' + c.lastName}"
-                        th:selected="${reservation.customer != null and c.id == reservation.customer.id}">
-                </option>
-            </select>
+<div th:fragment="reservationsForm" th:if="${reservation != null}">
+    <div id="reservationsFormContent">
+        <div class="form-container" style="max-width: 400px;">
+
+            <h2 class="mb-1 text-primary text-center"
+                th:text="${reservation.id} != null ? 'Edit Reservation' : 'New Reservation'">
+            </h2>
+            <!-- Error Alert -->
+            <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+
+            <form class="mt-2" onsubmit="submitForm(event, 'reservations')" th:object="${reservation}">
+                <input th:field="*{id}" type="hidden"/>
+
+                <!-- Customer -->
+                <div class="mb-2">
+                    <label class="form-label" for="customer">Customer</label>
+                    <select class="form-select" id="customer" th:field="*{customer.id}">
+                        <option th:each="c : ${customers}"
+                                th:selected="${reservation.customer != null and c.id == reservation.customer.id}"
+                                th:text="${c.firstName + ' ' + c.lastName}"
+                                th:value="${c.id}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Hotel -->
+                <div class="mb-2">
+                    <label class="form-label" for="hotel">Hotel</label>
+                    <select class="form-select" id="hotel" th:field="*{hotel.id}">
+                        <option th:each="h : ${hotels}"
+                                th:selected="${reservation.hotel != null and h.id == reservation.hotel.id}"
+                                th:text="${h.name}"
+                                th:value="${h.id}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Status -->
+                <div class="mb-2">
+                    <label class="form-label" for="status">Status</label>
+                    <select class="form-select" id="status" th:field="*{status}">
+                        <option th:selected="${reservation.status == 'BOOKED'}" value="BOOKED">Booked</option>
+                        <option th:selected="${reservation.status == 'CHECKED_IN'}" value="CHECKED_IN">Checked In
+                        </option>
+                        <option th:selected="${reservation.status == 'CHECKED_OUT'}" value="CHECKED_OUT">Checked Out
+                        </option>
+                        <option th:selected="${reservation.status == 'CANCELLED'}" value="CANCELLED">Cancelled</option>
+                    </select>
+                </div>
+
+                <!-- Check-In Date -->
+                <div class="mb-2">
+                    <label class="form-label" for="checkIn">Check-In Date</label>
+                    <input class="form-control" id="checkIn" th:field="*{checkInDate}" type="date"/>
+                </div>
+
+                <!-- Check-Out Date -->
+                <div class="mb-2">
+                    <label class="form-label" for="checkOut">Check-Out Date</label>
+                    <input class="form-control" id="checkOut" th:field="*{checkOutDate}" type="date"/>
+                </div>
+
+                <!-- Total Amount -->
+                <div class="mb-2">
+                    <label class="form-label" for="totalAmount">Total Amount</label>
+                    <input class="form-control" id="totalAmount" th:field="*{totalAmount}" type="number"/>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex gap-2">
+                    <!-- Save / Update button -->
+                    <button class="btn btn-success" type="submit">
+                        <i class="bi bi-save"></i>
+                        <span th:text="${reservation.id != null} ? 'Update' : 'Create'"></span>
+                    </button>
+
+                    <!-- Back button loads the list fragment -->
+                    <a class="btn btn-secondary" href="#" onclick="loadList('reservations')">
+                        <i class="bi bi-arrow-left-circle"></i>Back to Reservations
+                    </a>
+                </div>
+            </form>
         </div>
-        <!-- Hotel Dropdown -->
-        <div class="mb-3">
-            <label for="hotel" class="form-label">Hotel</label>
-            <select id="hotel" class="form-select" th:field="*{hotel.id}">
-                <option th:each="h : ${hotels}"
-                        th:value="${h.id}"
-                        th:text="${h.name}"
-                        th:selected="${reservation.hotel != null and h.id == reservation.hotel.id}">
-                </option>
-            </select>
-        </div>
-        <!-- Status -->
-        <div class="mb-3">
-            <label for="status" class="form-label">Status</label>
-            <select id="status" class="form-select" th:field="*{status}">
-                <option value="BOOKED" th:selected="${reservation.status == 'BOOKED'}">Booked</option>
-                <option value="CHECKED_IN" th:selected="${reservation.status == 'CHECKED_IN'}">Checked In</option>
-                <option value="CHECKED_OUT" th:selected="${reservation.status == 'CHECKED_OUT'}">Checked Out</option>
-                <option value="CANCELLED" th:selected="${reservation.status == 'CANCELLED'}">Cancelled</option>
-            </select>
-        </div>
-        <!-- Check-In -->
-        <div class="mb-3">
-            <label for="checkIn" class="form-label">Check-In Date</label>
-            <input type="date" id="checkIn" class="form-control" th:field="*{checkInDate}" />
-        </div>
-        <!-- Check-Out -->
-        <div class="mb-3">
-            <label for="checkOut" class="form-label">Check-Out Date</label>
-            <input type="date" id="checkOut" class="form-control" th:field="*{checkOutDate}" />
-        </div>
-        <!-- Total Amount -->
-        <div class="mb-3">
-            <label for="totalAmount" class="form-label">Total Amount</label>
-            <input type="number" step="0.01" id="totalAmount" class="form-control" th:field="*{totalAmount}"/>
-        </div>
-        <button type="submit" class="btn btn-primary" th:text="${reservation.id} != null ? 'Update' : 'Create'"></button>
-        <a th:href="@{/reservations/reservations_list}" class="btn btn-secondary">Cancel</a>
-    </form>
+    </div>
 </div>
-<!-- Scripts -->
-<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
-</body>
-</html>

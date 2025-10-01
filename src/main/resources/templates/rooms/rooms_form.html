@@ -1,64 +1,66 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title th:text="${room.id == null} ? 'Add Room' : 'Edit Room'">Room Form</title>
-    <link href="/favicon.ico" rel="icon" type="image/x-icon"/>
-    <!-- CSS Styles -->
-    <th:block th:replace="~{fragments/styles :: styles}"></th:block>
-</head>
-<body>
-<div class="container mt-5">
-    <h2 th:text="${room.id == null} ? 'Add Room' : 'Edit Room'"></h2>
-    <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
-    <form class="mt-3"
-          method="post" th:action="@{${room.id == null} ? '/rooms/rooms_list/create' : '/rooms/rooms_list/update'}" th:object="${room}">
+<div th:fragment="roomsForm">
+    <div class="form-container" style="max-width: 400px;"> <!-- Compact width -->
+        <h2 class="mb-1 text-primary text-center" th:text="${room.id == null} ? 'Add Room' : 'Edit Room'"></h2>
 
-        <input th:field="*{id}" type="hidden"/>
+        <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
 
-        <div class="mb-3">
-            <label class="form-label" for="roomNumber">Room Number</label>
-            <input class="form-control" id="roomNumber" required th:field="*{roomNumber}" type="text">
-        </div>
+        <form class="mt-3" onsubmit="submitForm(event, 'rooms')" th:object="${room}">
 
-        <div class="mb-3">
-            <label class="form-label" for="floor">Floor</label>
-            <input class="form-control" id="floor" th:field="*{floor}" type="number">
-        </div>
+            <input th:field="*{id}" type="hidden"/>
 
-        <div class="mb-3">
-            <label class="form-label" for="status">Status</label>
-            <select class="form-select" id="status" required th:field="*{status}">
-                <option value="">-- SELECT STATUS --</option>
-                <option th:selected="${room.status == 'AVAILABLE'}" value="AVAILABLE">AVAILABLE</option>
-                <option th:selected="${room.status == 'OCCUPIED'}" value="OCCUPIED">OCCUPIED</option>
-                <option th:selected="${room.status == 'MAINTENANCE'}" value="MAINTENANCE">MAINTENANCE</option>
-                <option th:selected="${room.status == 'OUT_OF_SERVICE'}" value="OUT_OF_SERVICE">OUT_OF_SERVICE</option>
-                <option th:selected="${room.status == 'BOOKED'}" value="BOOKED">BOOKED</option>
-            </select>
-        </div>
+            <!-- Hotel -->
+            <div class="mb-2">
+                <label class="form-label" for="hotel" style="font-size:0.85rem;">Hotel</label>
+                <select class="form-select form-select-sm" id="hotel" required th:field="*{hotel.id}">
+                    <option th:each="h : ${hotels}" th:text="${h.name}" th:value="${h.id}"></option>
+                </select>
+            </div>
 
+            <!-- Room Number -->
+            <div class="mb-2">
+                <label class="form-label" for="roomNumber" style="font-size:0.85rem;">Room Number</label>
+                <input class="form-control form-control-sm" id="roomNumber" placeholder="Room #" th:field="*{roomNumber}"
+                       type="text">
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label" for="hotel">Hotel</label>
-            <select class="form-select" id="hotel" required th:field="*{hotel.id}">
-                <option th:each="h : ${hotels}" th:text="${h.name}" th:value="${h.id}"></option>
-            </select>
-        </div>
+            <!-- Room Type -->
+            <div class="mb-2">
+                <label class="form-label" for="roomType" style="font-size:0.85rem;">Room Type</label>
+                <select class="form-select form-select-sm" id="roomType" required th:field="*{roomType.id}">
+                    <option th:each="type : ${roomTypes}" th:text="${type.name}" th:value="${type.id}"></option>
+                </select>
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label" for="roomType">Room Type</label>
-            <select class="form-select" id="roomType" required th:field="*{roomType.id}">
-                <option th:each="type : ${roomTypes}" th:text="${type.name}" th:value="${type.id}"></option>
-            </select>
-        </div>
+            <!-- Floor -->
+            <div class="mb-2">
+                <label class="form-label" for="floor" style="font-size:0.85rem;">Floor</label>
+                <input class="form-control form-control-sm" id="floor" placeholder="Floor #" th:field="*{floor}"
+                       type="number">
+            </div>
 
-        <button class="btn btn-success" type="submit">Save</button>
-        <a class="btn btn-secondary" th:href="@{/rooms/rooms_list}">Back to Rooms</a>
-    </form>
+            <!-- Status -->
+            <div class="mb-3">
+                <label class="form-label" for="status" style="font-size:0.85rem;">Status</label>
+                <select class="form-select form-select-sm" id="status" th:field="*{status}">
+                    <option value="Available">Available</option>
+                    <option value="Occupied">Occupied</option>
+                    <option value="Maintenance">Maintenance</option>
+                </select>
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex gap-2 justify-content-center">
+                <!-- Save / Update button -->
+                <button class="btn btn-success" type="submit">
+                    <i class="bi bi-save"></i>
+                    <span th:text="${room.id != null} ? 'Update' : 'Create'"></span>
+                </button>
+
+                <!-- Back button loads the list fragment -->
+                <a class="btn btn-secondary btn-sm" href="#" onclick="loadList('rooms')">
+                    <i class="bi bi-arrow-left-circle"></i>Back to Rooms
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
-
-<!-- Scripts -->
-<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
-</body>
-</html>
