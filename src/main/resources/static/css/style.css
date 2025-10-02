@@ -520,4 +520,41 @@ input[type=number] {
     text-overflow: ellipsis;
 }
 
+/* Base table style */
+.data-table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* default: no wrap */
+    vertical-align: middle;
+}
+
+/* Column size classes (reusable across modules) */
+.col-id     { width: 15px; }   /* small ID column */
+.col-res-id     { width: 30px; }   /* small ID column */
+.col-room     { width: 33px; }   /* small ID column */
+.col-small     { width: 85px; }  /* small columns like phone, timezone */
+.col-status     { width: 75px; }  /* small columns like phone, timezone */
+.col-small-medium     { width: 100px; }  /* medium columns like name, hotel name */
+.col-date     { width: 60px; }  /* medium columns like date */
+.col-amount     { width: 60px; }  /* large columns like amount */
+.col-medium     { width: 160px; }  /* medium columns like name */
+.col-large     { width: 260px; }  /* large columns like address */
+.col-transaction     { width: 180px; }  /* large columns like address */
+.col-action { width: 100px; }  /* action buttons column */
+
+/* Allow wrapping in specific columns */
+.col-wrap {
+    white-space: normal !important; /* allow wrapping */
+    word-break: break-word;         /* break long words */
+    overflow: visible;              /* show all wrapped lines */
+    text-overflow: clip;            /* no ellipsis when wrapping */
+}
+
 

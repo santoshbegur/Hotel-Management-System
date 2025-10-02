@@ -30,26 +30,17 @@ $(".nav-click").click(function (e) {
     e.preventDefault();
     $(".nav-click").removeClass("active");
     $(this).addClass("active");
-
+    const target = $(this).data("target");
     localStorage.setItem("activeMenu", $(this).data("target")); // store target
 
-    const target = $(this).data("target");
-    if (target === "home") showHomeContent();
+    if (target === "home") {
+        showHomeContent();
+    }
     else {
         hideHomeContent();
         loadList(target);
     }
 });
-
-// Restore active link on page load
-$(document).ready(function () {
-    const savedMenu = localStorage.getItem("activeMenu");
-    if (savedMenu) {
-        $(".nav-click").removeClass("active");
-        $(`.nav-click[data-target='${savedMenu}']`).addClass("active");
-    }
-});
-
 
 /* =========================================================
    Load Modules: List & Form

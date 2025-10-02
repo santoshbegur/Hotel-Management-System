@@ -13,26 +13,25 @@
 
             <!-- Hotels Table -->
             <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover table-sm data-table" id="hotelsTable"
-                       style="table-layout: fixed; width: 100%;">
+                <table id="hotelsTable" class="table table-striped table-bordered table-hover table-sm data-table">
                     <thead class="table-dark">
                     <tr>
-                        <th style="width: 15px; white-space: nowrap;">ID</th>
-                        <th style="width: 150px;">Name</th>
-                        <th style="width: 250px;">Address</th>
-                        <th style="width: 90px;">Phone</th>
-                        <th style="width: 100px;">Timezone</th>
-                        <th style="width: 100px;">Actions</th>
+                        <th class="col-id">ID</th>
+                        <th class="col-medium col-wrap">Name</th>
+                        <th class="col-large col-wrap">Address</th>
+                        <th class="col-small">Phone</th>
+                        <th class="col-small">Timezone</th>
+                        <th class="col-action">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="hotel : ${hotels}">
-                        <td class="white-space: nowrap;" th:text="${hotel.id}"></td>
-                        <td class="white-space: nowrap;" th:text="${hotel.name}"></td>
-                        <td class="white-space: nowrap;" th:text="${hotel.address}"></td>
-                        <td class="white-space: nowrap;" th:text="${hotel.phone}"></td>
-                        <td class="white-space: nowrap;" th:text="${hotel.timezone}"></td>
-                        <td class="white-space: nowrap;">
+                        <td class="col-id" th:text="${hotel.id}"></td>
+                        <td class="col-medium col-wrap" th:text="${hotel.name}"></td>
+                        <td class="col-large col-wrap" th:text="${hotel.address}"></td>
+                        <td class="col-small" th:text="${hotel.phone}"></td>
+                        <td class="col-small" th:text="${hotel.timezone}"></td>
+                        <td class="col-action">
                             <a class="btn btn-sm btn-warning" href="#"
                                th:onclick="'loadForm(\'hotels\', ' + ${hotel.id} + ')'">
                                 <i class="bi bi-pencil-square"></i> Edit

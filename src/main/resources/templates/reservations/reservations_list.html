@@ -14,26 +14,26 @@
         <table class="table table-striped table-bordered table-hover table-sm data-table">
             <thead class="table-dark">
             <tr>
-                <th>ID</th>
-                <th>Customer</th>
-                <th>Hotel</th>
-                <th>Status</th>
-                <th>Check-In</th>
-                <th>Check-Out</th>
-                <th>Total Amount</th>
-                <th class="actions">Actions</th>
+                <th class="col-id">ID</th>
+                <th class="col-small-medium col-nowrap">Customer</th>
+                <th class="col-medium col-wrap">Hotel</th>
+                <th class="col-small">Status</th>
+                <th class="col-date">Check-In</th>
+                <th class="col-date">Check-Out</th>
+                <th class="col-amount">Total Amount</th>
+                <th class="col-actions">Actions</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="reservation : ${reservations}">
-                <td th:text="${reservation.id}"></td>
-                <td th:text="${reservation.customer.firstName + ' ' + reservation.customer.lastName}"></td>
-                <td th:text="${reservation.hotel.name}"></td>
-                <td th:text="${reservation.status}"></td>
-                <td th:text="${reservation.checkInDate}"></td>
-                <td th:text="${reservation.checkOutDate}"></td>
-                <td th:text="${reservation.totalAmount}"></td>
-                <td>
+                <td class="col-id" th:text="${reservation.id}"></td>
+                <td class="col-small-medium col-nowrap" th:text="${reservation.customer.firstName + ' ' + reservation.customer.lastName}"></td>
+                <td class="col-medium col-wrap" th:text="${reservation.hotel.name}"></td>
+                <td class="col-small" th:text="${reservation.status}"></td>
+                <td class="col-date" th:text="${#temporals.format(reservation.checkInDate, 'dd-MM-yyyy')}"></td>
+                <td class="col-date" th:text="${#temporals.format(reservation.checkOutDate, 'dd-MM-yyyy')}"></td>
+                <td class="col-amount" th:text="${reservation.totalAmount}"></td>
+                <td class="col-actions">
                     <a class="btn btn-sm btn-warning" href="#"
                        th:onclick="'loadForm(\'reservations\', ' + ${reservation.id} + ')'">
                         <i class="bi bi-pencil-square"></i> Edit

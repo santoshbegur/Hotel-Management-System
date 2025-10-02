@@ -12,24 +12,24 @@
             <table class="table table-striped table-bordered table-hover table-sm data-table">
                 <thead class="table-dark">
                 <tr>
-                    <th>ID</th>
-                    <th>Hotel</th>
-                    <th>RoomNo</th>
-                    <th>Type</th>
-                    <th>Floor</th>
-                    <th>Status</th>
-                    <th class="actions">Actions</th>
+                    <th class="col-id">ID</th>
+                    <th class="col-large">Hotel</th>
+                    <th class="col-small">Room Number</th>
+                    <th class="col-small">Type</th>
+                    <th class="col-amount">Floor</th>
+                    <th class="col-small">Status</th>
+                    <th class="col-actions">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="room : ${rooms}">
-                    <td th:text="${room.id}"></td>
-                    <td th:text="${room.hotel.name}"></td>
-                    <td th:text="${room.roomNumber}"></td>
-                    <td th:text="${room.roomType.name}"></td>
-                    <td th:text="${room.floor}"></td>
-                    <td th:text="${room.status}"></td>
-                    <td class="d-flex gap-1">
+                    <td class="col-id" th:text="${room.id}"></td>
+                    <td class="col-large" th:text="${room.hotel.name}"></td>
+                    <td class="col-small" th:text="${room.roomNumber}"></td>
+                    <td class="col-small" th:text="${room.roomType.name}"></td>
+                    <td class="col-amount" th:text="${room.floor}"></td>
+                    <td class="col-small" th:text="${room.status}"></td>
+                    <td class="col-action d-flex gap-1">
                         <a class="btn btn-sm btn-warning" href="#"
                            th:onclick="'loadForm(\'rooms\', ' + ${room.id} + ')'">
                             <i class="bi bi-pencil-square"></i> Edit
