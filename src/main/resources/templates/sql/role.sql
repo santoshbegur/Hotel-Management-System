@@ -1,0 +1,27 @@
+SET SQL_SAFE_UPDATES = 0;
+-- Your DELETE or UPDATE statement
+DELETE FROM role;
+-- Optionally, re-enable safe updates
+SET SQL_SAFE_UPDATES = 1;
+
+INSERT INTO `role` (`id`, `name`) VALUES
+(1, 'ADMIN'),
+(2, 'MANAGER'),
+(3, 'CUSTOMER'),
+(4, 'RECEPTIONIST'),
+(5, 'HOUSEKEEPING'),
+(6, 'MAINTENANCE'),
+(7, 'CHEF'),
+(8, 'FRONT_DESK'),
+(9, 'SALES'),
+(10, 'ACCOUNTANT'),
+(11, 'IT_SUPPORT'),
+(12, 'SECURITY'),
+(13, 'CONCIERGE'),
+(14, 'EVENT_MANAGER'),
+(15, 'GUEST_RELATIONS'),
+(16, 'CLEANING_SUPERVISOR'),
+(17, 'BELLBOY'),
+(18, 'SPA_MANAGER'),
+(19, 'POOL_LIFEGUARD'),
+(20, 'MARKETING');
