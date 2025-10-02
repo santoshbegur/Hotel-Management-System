@@ -1,11 +1,12 @@
 package com.example.hotelmanagement.controller;
 
 import com.example.hotelmanagement.entity.Reservation;
-import com.example.hotelmanagement.repository.CustomerRepository;
-import com.example.hotelmanagement.repository.HotelRepository;
-import com.example.hotelmanagement.repository.ReservationRepository;
-import com.example.hotelmanagement.repository.RoomRepository;
+import com.example.hotelmanagement.service.CustomerService;
+import com.example.hotelmanagement.service.HotelService;
+import com.example.hotelmanagement.service.ReservationService;
+import com.example.hotelmanagement.service.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,16 +22,19 @@ import java.util.List;
 @RequestMapping("/reservations/reservations_list")
 @RequiredArgsConstructor
 public class ReservationController {
-
-    private final ReservationRepository reservationRepository;
-    private final CustomerRepository customerRepository;
-    private final RoomRepository roomRepository;
-    private final HotelRepository hotelRepository;
+    @Autowired
+    private final ReservationService reservationService;
+    @Autowired
+    private final CustomerService customerService;
+    @Autowired
+    private final RoomService roomService;
+    @Autowired
+    private final HotelService hotelService;
 
     // List all reservations
     @GetMapping
     public String listReservations(Model model) {
-        List<Reservation> reservations = reservationRepository.findAll();
+        List<Reservation> reservations = reservationService.getAllReservations();
         model.addAttribute("reservations", reservations);
         return "reservations/reservations_list";
     }
@@ -40,8 +44,8 @@ public class ReservationController {
     public String showCreateForm(Model model) {
         Reservation reservation = new Reservation();
         model.addAttribute("reservation", reservation);
-        model.addAttribute("customers", customerRepository.findAll());
-        model.addAttribute("hotels", hotelRepository.findAll());
+        model.addAttribute("customers", customerService.findAll());
+        model.addAttribute("hotels", hotelService.findAllHotels());
         model.addAttribute("formAction", "/reservations/create");
         return "reservations/reservations_form";
     }
@@ -49,24 +53,23 @@ public class ReservationController {
     // Handle create
     @PostMapping("/create")
     public String createReservation(@ModelAttribute Reservation reservation) {
-        reservationRepository.save(reservation);
+        reservationService.saveReservation(reservation);
         return "redirect:/reservations/reservations_list";
     }
 
     // Show edit form
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        Reservation reservation = reservationRepository.getReservationById(id)
+        Reservation reservation = reservationService.getReservationById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid reservation Id:" + id));
         if (reservation == null) {
             throw new IllegalArgumentException("Invalid reservation ID: " + id);
         }
         model.addAttribute("reservation", reservation);
-        model.addAttribute("customers", customerRepository.findAll());
-        model.addAttribute("hotels", hotelRepository.findAll());
+        model.addAttribute("customers", customerService.findAll());
+        model.addAttribute("hotels", hotelService.findAllHotels());
         return "reservations/reservations_form";
     }
-
 
     // Handle update
     @PostMapping("/update")
@@ -79,7 +82,7 @@ public class ReservationController {
         }
 
         // Example duplicate booking check
-        boolean exists = reservationRepository
+        boolean exists = reservationService
                 .findOverlappingReservation(
                         reservation.getHotel(),
                         reservation.getCheckInDate(),
@@ -93,17 +96,16 @@ public class ReservationController {
             return "redirect:/reservations/edit/" + reservation.getId();
         }
 
-        reservationRepository.save(reservation);
+        reservationService.saveReservation(reservation);
         return "redirect:/reservations/reservations_list";
     }
-
 
     // Delete reservation
     @DeleteMapping("/delete/{id}")
     @ResponseBody
     public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {
         try {
-            reservationRepository.deleteById(id);
+            reservationService.deleteReservation(id);
             return ResponseEntity.ok().build(); // 200 OK on success
         } catch (DataIntegrityViolationException e) {
             // return 409 Conflict

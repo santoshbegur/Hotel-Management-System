@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
     Optional<Room> findByRoomNumberAndHotelId(String roomNumber, Long hotelId);
+
+    void deleteById(Long id);
 }

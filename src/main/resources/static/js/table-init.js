@@ -14,7 +14,7 @@ function initDataTables(moduleName = "") {
             : "Records";
         // Initialize DataTable
         $(this).DataTable({
-            pageLength: 7,           // 10 records per page
+            pageLength: 8,           // 10 records per page
             lengthChange: true,      // show dropdown to select number of records
             lengthMenu: [5, 6, 7, 8, 9, 10, 25, 50, 100], // options in dropdown
             info: true,              // show "Showing x of y entries"

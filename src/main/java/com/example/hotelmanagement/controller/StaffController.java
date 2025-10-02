@@ -1,11 +1,12 @@
 package com.example.hotelmanagement.controller;
 
 import com.example.hotelmanagement.entity.Staff;
-import com.example.hotelmanagement.repository.HotelRepository;
-import com.example.hotelmanagement.repository.RoleRepository;
-import com.example.hotelmanagement.repository.StaffRepository;
-import com.example.hotelmanagement.repository.UserRepository;
+import com.example.hotelmanagement.service.HotelService;
+import com.example.hotelmanagement.service.StaffService;
+import com.example.hotelmanagement.service.UserService;
+import com.example.hotelmanagement.service.RoleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,17 +21,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StaffController {
 
-    private final StaffRepository staffRepository;
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final HotelRepository hotelRepository;
+    @Autowired
+    private final StaffService staffService;
+    @Autowired
+    private final UserService userService;
+    @Autowired
+    private final RoleService roleService;
+    @Autowired
+    private final HotelService hotelService;
 
     /**
      * LIST ALL STAFF
      */
     @GetMapping
     public String listStaff(Model model) {
-        List<Staff> staffList = staffRepository.findAll();
+        List<Staff> staffList = staffService.findAll();
         model.addAttribute("staffList", staffList);
         return "staffs/staffs_list";
     }
@@ -41,9 +46,9 @@ public class StaffController {
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("staff", new Staff());
-        model.addAttribute("users", userRepository.findAll());
-        model.addAttribute("roles", roleRepository.findAll());
-        model.addAttribute("hotels", hotelRepository.findAll());
+        model.addAttribute("users", userService.findAll());
+        model.addAttribute("roles", roleService.findAll());
+        model.addAttribute("hotels", hotelService.findAllHotels());
         return "staffs/staffs_form";
     }
 
@@ -52,7 +57,7 @@ public class StaffController {
      */
     @PostMapping("/create")
     public String createStaff(@ModelAttribute Staff staff) {
-        staffRepository.save(staff);
+        staffService.saveStaff(staff);
         return "redirect:/staffs/staffs_list";
     }
 
@@ -61,11 +66,11 @@ public class StaffController {
      */
     @GetMapping("/edit/{id}")
     public String editStaff(@PathVariable Long id, Model model) {
-        staffRepository.findById(id).ifPresent(staff -> {
+        staffService.findById(id).ifPresent(staff -> {
             model.addAttribute("staff", staff);
-            model.addAttribute("users", userRepository.findAll());
-            model.addAttribute("roles", roleRepository.findAll());
-            model.addAttribute("hotels", hotelRepository.findAll());
+            model.addAttribute("users", userService.findAll());
+            model.addAttribute("roles", roleService.findAll());
+            model.addAttribute("hotels", hotelService.findAllHotels());
         });
         return "staffs/staffs_form";
     }
@@ -75,7 +80,7 @@ public class StaffController {
      */
     @PostMapping("/update")
     public String updateStaff(@ModelAttribute Staff staff) {
-        staffRepository.save(staff);
+        staffService.saveStaff(staff);
         return "redirect:/staffs/staffs_list";
     }
 
@@ -86,7 +91,7 @@ public class StaffController {
     @ResponseBody
     public ResponseEntity<Void> deleteStaff(@PathVariable Long id) {
         try {
-            staffRepository.deleteById(id);
+            staffService.deleteStaff(id);
             return ResponseEntity.ok().build(); // 200 OK on success
         } catch (DataIntegrityViolationException e) {
             // return 409 Conflict

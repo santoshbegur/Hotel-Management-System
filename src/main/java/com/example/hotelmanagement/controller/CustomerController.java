@@ -1,8 +1,9 @@
 package com.example.hotelmanagement.controller;
 
 import com.example.hotelmanagement.entity.Customer;
-import com.example.hotelmanagement.repository.CustomerRepository;
+import com.example.hotelmanagement.service.CustomerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,43 +15,43 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/customers/customers_list")
 @RequiredArgsConstructor
 public class CustomerController {
-
-    private final CustomerRepository customerRepository;
+    @Autowired
+    private final CustomerService customerService;
 
     // Return customers list fragment
     @GetMapping
     public String listCustomers(Model model) {
-        model.addAttribute("customers", customerRepository.findAll());
-        return "customers/customers_list :: customersList"; // return fragment
+        model.addAttribute("customers", customerService.findAll());
+        return "customers/customers_list"; // return fragment
     }
 
     // Show empty form (create)
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("customer", new Customer());
-        return "customers/customers_form :: customersForm"; // return fragment
+        return "customers/customers_form"; // return fragment
     }
 
     // Save new customer
     @PostMapping("/create")
     @ResponseBody
-    public ResponseEntity<?> createCustomer(@ModelAttribute Customer customer) {
-        customerRepository.save(customer);
+    public ResponseEntity<Customer> createCustomer(@ModelAttribute Customer customer) {
+        customerService.save(customer);
         return ResponseEntity.ok().build(); // let JS reload the list
     }
 
     // Show edit form
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        Customer customer = customerRepository.findById(id)
+        Customer customer = customerService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" + id));
         model.addAttribute("customer", customer);
-        return "customers/customers_form :: customersForm"; // return fragment
+        return "customers/customers_form"; // return fragment
     }
 
     @GetMapping("/update/{id}")
     public String showUpdateForm(@PathVariable Long id, Model model) {
-        Customer customer = customerRepository.findById(id)
+        Customer customer = customerService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" + id));
         model.addAttribute("customer", customer);
         return "customers/customers_form"; // form to edit
@@ -59,7 +60,7 @@ public class CustomerController {
     // Handle update
     @PostMapping("/update")
     public String updateCustomer(@ModelAttribute Customer customer) {
-        customerRepository.save(customer);
+        customerService.save(customer);
         return "redirect:/customers/customers_list";
     }
 
@@ -68,7 +69,7 @@ public class CustomerController {
     @ResponseBody
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
         try {
-            customerRepository.deleteById(id);
+            customerService.deleteById(id);
             return ResponseEntity.ok().build();
         } catch (DataIntegrityViolationException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();

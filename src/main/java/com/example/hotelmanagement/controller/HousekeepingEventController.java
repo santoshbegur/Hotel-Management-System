@@ -3,10 +3,11 @@ package com.example.hotelmanagement.controller;
 import com.example.hotelmanagement.entity.HousekeepingEvent;
 import com.example.hotelmanagement.entity.Room;
 import com.example.hotelmanagement.entity.Staff;
-import com.example.hotelmanagement.repository.HousekeepingEventRepository;
-import com.example.hotelmanagement.repository.RoomRepository;
-import com.example.hotelmanagement.repository.StaffRepository;
+import com.example.hotelmanagement.service.HousekeepingEventService;
+import com.example.hotelmanagement.service.RoomService;
+import com.example.hotelmanagement.service.StaffService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +21,17 @@ import java.time.LocalDateTime;
 @RequestMapping("/housekeeping/housekeeping_list")
 @RequiredArgsConstructor
 public class HousekeepingEventController {
-
-    private final HousekeepingEventRepository housekeepingEventRepository;
-    private final RoomRepository roomRepository;
-    private final StaffRepository staffRepository;
+    @Autowired
+    private final HousekeepingEventService housekeepingEventService;
+    @Autowired
+    private final RoomService roomService;
+    @Autowired
+    private final StaffService staffService;
 
     // List all housekeeping events
     @GetMapping
     public String listEvents(Model model) {
-        model.addAttribute("events", housekeepingEventRepository.findAll());
+        model.addAttribute("events", housekeepingEventService.findAll());
         return "housekeeping/housekeeping_list";
     }
 
@@ -36,9 +39,9 @@ public class HousekeepingEventController {
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("housekeepingEvent", new HousekeepingEvent());
-        model.addAttribute("rooms", roomRepository.findAll());
-        model.addAttribute("staffList", staffRepository.findAll());
-        model.addAttribute("activeRoomIds", housekeepingEventRepository.findActiveRoomIds());
+        model.addAttribute("rooms", roomService.findAllRooms());
+        model.addAttribute("staffList", staffService.findAll());
+        model.addAttribute("activeRoomIds", housekeepingEventService.findActiveRoomIds());
         return "housekeeping/housekeeping_form";
     }
 
@@ -47,19 +50,19 @@ public class HousekeepingEventController {
     public String createEvent(@ModelAttribute HousekeepingEvent housekeepingEvent) {
         loadRoomAndStaff(housekeepingEvent);
         housekeepingEvent.setReportedAt(LocalDateTime.now());
-        housekeepingEventRepository.save(housekeepingEvent);
+        housekeepingEventService.saveHousekeepingEvent(housekeepingEvent);
         return "redirect:/housekeeping/housekeeping_list";
     }
 
     // Show edit form
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        HousekeepingEvent event = housekeepingEventRepository.findById(id)
+        HousekeepingEvent event = housekeepingEventService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid event Id: " + id));
         model.addAttribute("housekeepingEvent", event);
-        model.addAttribute("rooms", roomRepository.findAll());
-        model.addAttribute("staffList", staffRepository.findAll());
-        model.addAttribute("activeRoomIds", housekeepingEventRepository.findActiveRoomIds()
+        model.addAttribute("rooms", roomService.findAllRooms());
+        model.addAttribute("staffList", staffService.findAll());
+        model.addAttribute("activeRoomIds", housekeepingEventService.findActiveRoomIds()
                 .stream().filter(rid -> !rid.equals(event.getRoom().getId())).toList());
         return "housekeeping/housekeeping_form";
     }
@@ -67,10 +70,10 @@ public class HousekeepingEventController {
     // Save update
     @PostMapping("/update/{id}")
     public String updateEvent(@PathVariable Long id, @ModelAttribute HousekeepingEvent housekeepingEvent) {
-        HousekeepingEvent existingEvent = housekeepingEventRepository.findById(id)
+        HousekeepingEvent existingEvent = housekeepingEventService.findById(id)
                 .orElseThrow(() -> new RuntimeException("Event not found"));
         loadRoomAndStaffForUpdate(existingEvent, housekeepingEvent);
-        housekeepingEventRepository.save(existingEvent);
+        housekeepingEventService.saveHousekeepingEvent(existingEvent);
         return "redirect:/housekeeping/housekeeping_list";
     }
 
@@ -79,7 +82,7 @@ public class HousekeepingEventController {
     @ResponseBody
     public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
         try {
-            housekeepingEventRepository.deleteById(id);
+            housekeepingEventService.deleteById(id);
             return ResponseEntity.ok().build();
         } catch (DataIntegrityViolationException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -89,34 +92,33 @@ public class HousekeepingEventController {
     }
 
     // --- Helper methods ---
-
-    private void loadRoomAndStaff(HousekeepingEvent event) {
+    private void loadRoomAndStaff(HousekeepingEvent event) throws RuntimeException {
         if (event.getRoom() == null || event.getRoom().getId() == null) {
             throw new RuntimeException("Room is required");
         }
-        Room room = roomRepository.findById(event.getRoom().getId())
-                .orElseThrow(() -> new RuntimeException("Room not found"));
+        Room room = roomService.findRoomById(event.getRoom().getId()).orElseThrow(()
+                -> new RuntimeException("Room not found"));
         event.setRoom(room);
 
         if (event.getHandledBy() != null && event.getHandledBy().getId() != null) {
-            Staff staff = staffRepository.findById(event.getHandledBy().getId())
+            Staff staff = staffService.findById(event.getHandledBy().getId())
                     .orElseThrow(() -> new RuntimeException("Staff not found"));
             event.setHandledBy(staff);
         }
     }
 
-    private void loadRoomAndStaffForUpdate(HousekeepingEvent existingEvent, HousekeepingEvent updatedEvent) {
+    private void loadRoomAndStaffForUpdate(HousekeepingEvent existingEvent, HousekeepingEvent updatedEvent) throws RuntimeException {
         // Load Room
         if (updatedEvent.getRoom() == null || updatedEvent.getRoom().getId() == null) {
             throw new RuntimeException("Room must be selected");
         }
-        Room room = roomRepository.findById(updatedEvent.getRoom().getId())
+        Room room = roomService.findRoomById(updatedEvent.getRoom().getId())
                 .orElseThrow(() -> new RuntimeException("Room not found"));
         existingEvent.setRoom(room);
 
         // Load Staff
         if (updatedEvent.getHandledBy() != null && updatedEvent.getHandledBy().getId() != null) {
-            Staff staff = staffRepository.findById(updatedEvent.getHandledBy().getId())
+            Staff staff = staffService.findById(updatedEvent.getHandledBy().getId())
                     .orElseThrow(() -> new RuntimeException("Staff not found"));
             existingEvent.setHandledBy(staff);
         } else {

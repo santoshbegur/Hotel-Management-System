@@ -25,5 +25,4 @@ public interface HousekeepingEventRepository extends JpaRepository<HousekeepingE
     @Query("SELECT e.room.id FROM HousekeepingEvent e WHERE e.status IN ('PENDING', 'IN_PROGRESS')")
     List<Long> findActiveRoomIds();
 
-
 }

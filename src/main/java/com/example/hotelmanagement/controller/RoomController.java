@@ -7,6 +7,7 @@ import com.example.hotelmanagement.service.HotelService;
 import com.example.hotelmanagement.service.RoomService;
 import com.example.hotelmanagement.service.RoomTypeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +22,11 @@ import java.util.List;
 @RequestMapping("/rooms/rooms_list")
 @RequiredArgsConstructor
 public class RoomController {
-
+    @Autowired
     private final RoomService roomService;
+    @Autowired
     private final RoomTypeService roomTypeService;
+    @Autowired
     private final HotelService hotelService;
 
     /**

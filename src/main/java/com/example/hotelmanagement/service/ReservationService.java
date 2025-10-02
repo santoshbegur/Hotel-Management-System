@@ -1,10 +1,12 @@
 package com.example.hotelmanagement.service;
 
+import com.example.hotelmanagement.entity.Hotel;
 import com.example.hotelmanagement.entity.Reservation;
 import com.example.hotelmanagement.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,9 +20,8 @@ public class ReservationService {
         return reservationRepository.findAll();
     }
 
-    public Reservation getReservationById(Long id) {
-        Optional<Reservation> reservation = reservationRepository.findById(id);
-        return reservation.orElse(null);
+    public Optional<Reservation> getReservationById(Long id) {
+        return reservationRepository.findById(id);
     }
 
     public Reservation saveReservation(Reservation reservation) {
@@ -29,6 +30,10 @@ public class ReservationService {
 
     public void deleteReservation(Long id) {
         reservationRepository.deleteById(id);
+    }
+
+    public Optional<Reservation> findOverlappingReservation(Hotel hotel, LocalDate checkInDate, LocalDate checkOutDate, Long id) {
+        return reservationRepository.findOverlappingReservation(hotel, checkInDate, checkOutDate, id);
     }
 }
 

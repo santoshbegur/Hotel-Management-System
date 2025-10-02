@@ -1,9 +1,10 @@
 package com.example.hotelmanagement.controller;
 
 import com.example.hotelmanagement.entity.User;
-import com.example.hotelmanagement.repository.RoleRepository;
-import com.example.hotelmanagement.repository.UserRepository;
+import com.example.hotelmanagement.service.RoleService;
+import com.example.hotelmanagement.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +18,17 @@ import java.util.List;
 @RequestMapping("/users/users_list")
 @RequiredArgsConstructor
 public class UserController {
-
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    @Autowired
+    private final UserService userService;
+    @Autowired
+    private final RoleService roleService;
 
     /**
      * LIST ALL USERS
      */
     @GetMapping
     public String listUsers(Model model) {
-        List<User> users = userRepository.findAll();
+        List<User> users = userService.findAll();
         model.addAttribute("users", users);
         return "users/users_list";
     }
@@ -37,7 +39,7 @@ public class UserController {
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("user", new User());
-        model.addAttribute("roles", roleRepository.findAll());
+        model.addAttribute("roles", roleService.findAll());
         return "users/users_form";
     }
 
@@ -46,7 +48,7 @@ public class UserController {
      */
     @PostMapping("/create")
     public String createUser(@ModelAttribute User user) {
-        userRepository.save(user);
+        userService.saveUser(user);
         return "redirect:/users/users_list";
     }
 
@@ -55,9 +57,9 @@ public class UserController {
      */
     @GetMapping("/edit/{id}")
     public String editUser(@PathVariable Long id, Model model) {
-        userRepository.findById(id).ifPresent(user -> {
+        userService.findById(id).ifPresent(user -> {
             model.addAttribute("user", user);
-            model.addAttribute("roles", roleRepository.findAll());
+            model.addAttribute("roles", roleService.findAll());
         });
         return "users/users_form";
     }
@@ -67,7 +69,7 @@ public class UserController {
      */
     @PostMapping("/update")
     public String updateUser(@ModelAttribute User user) {
-        userRepository.save(user);
+        userService.saveUser(user);
         return "redirect:/users/users_list";
     }
 
@@ -78,7 +80,7 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         try {
-            userRepository.deleteById(id);
+            userService.deleteUser(id);
             return ResponseEntity.ok().build(); // 200 OK on success
         } catch (DataIntegrityViolationException e) {
             // return 409 Conflict
