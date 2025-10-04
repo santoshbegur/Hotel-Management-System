@@ -75,7 +75,6 @@ public class ReservationController {
     @PostMapping("/update")
     public String updateReservation(@ModelAttribute Reservation reservation,
                                     RedirectAttributes redirectAttributes) {
-
         // Null-safe handling
         if (reservation.getReservationLines() == null) {
             reservation.setReservationLines(new ArrayList<>());

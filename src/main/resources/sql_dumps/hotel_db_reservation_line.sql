@@ -33,7 +33,7 @@ CREATE TABLE `reservation_line` (
   KEY `fk_res_line_room` (`room_id`),
   CONSTRAINT `fk_res_line_reservation` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`),
   CONSTRAINT `fk_res_line_room` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,7 @@ CREATE TABLE `reservation_line` (
 
 LOCK TABLES `reservation_line` WRITE;
 /*!40000 ALTER TABLE `reservation_line` DISABLE KEYS */;
-INSERT INTO `reservation_line` VALUES (1,1,1,3500.00,2),(2,2,4,2500.00,2);
+INSERT INTO `reservation_line` VALUES (2,2,12,4200.00,2),(6,6,7,3000.00,6),(7,7,18,4500.00,3),(8,8,10,2200.00,1),(9,9,25,5500.00,4),(10,10,14,4000.00,2),(11,11,30,4800.00,3),(12,12,21,2600.00,5),(13,13,33,7000.00,7),(14,14,28,3200.00,2),(15,15,40,3700.00,3),(16,16,35,2900.00,2),(17,17,44,5200.00,6),(18,18,38,4100.00,4),(19,19,48,2300.00,1),(20,20,50,6500.00,5),(21,24,5,NULL,NULL);
 /*!40000 ALTER TABLE `reservation_line` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-09-23  9:12:33
+-- Dump completed on 2025-10-04 21:47:06

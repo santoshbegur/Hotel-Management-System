@@ -16,37 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `reservation`
+-- Table structure for table `room_type`
 --
 
-DROP TABLE IF EXISTS `reservation`;
+DROP TABLE IF EXISTS `room_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `reservation` (
+CREATE TABLE `room_type` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `hotel_id` bigint DEFAULT NULL,
-  `customer_id` bigint DEFAULT NULL,
-  `status` varchar(255) DEFAULT NULL,
-  `check_in_date` date DEFAULT NULL,
-  `check_out_date` date DEFAULT NULL,
-  `total_amount` decimal(38,2) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `code` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `occupancy` int DEFAULT NULL,
+  `base_price` decimal(38,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_reservation_hotel` (`hotel_id`),
-  KEY `fk_reservation_customer` (`customer_id`),
-  CONSTRAINT `fk_reservation_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
-  CONSTRAINT `fk_reservation_hotel` FOREIGN KEY (`hotel_id`) REFERENCES `hotel` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `fk_room_type_hotel` (`hotel_id`),
+  CONSTRAINT `fk_room_type_hotel` FOREIGN KEY (`hotel_id`) REFERENCES `hotel` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reservation`
+-- Dumping data for table `room_type`
 --
 
-LOCK TABLES `reservation` WRITE;
-/*!40000 ALTER TABLE `reservation` DISABLE KEYS */;
-INSERT INTO `reservation` VALUES (1,1,1,'CHECKED_OUT','2025-09-20','2025-09-22',7000.00,NULL),(2,2,2,'CHECKED_IN','2025-09-04','2025-09-12',5000.00,NULL),(3,1,1,'BOOKED','2025-09-12','2025-09-22',6000.00,NULL),(4,1,1,'BOOKED','2025-09-11','2025-09-24',9000.00,NULL);
-/*!40000 ALTER TABLE `reservation` ENABLE KEYS */;
+LOCK TABLES `room_type` WRITE;
+/*!40000 ALTER TABLE `room_type` DISABLE KEYS */;
+INSERT INTO `room_type` VALUES (1,1,'STD','Standard Room',2,3500.00),(2,1,'DLX','Deluxe Room',3,5200.00),(3,1,'SUI','Executive Suite',4,8500.00),(4,1,'FAM','Family Room',5,7500.00),(5,1,'PEN','Penthouse',4,12000.00),(6,2,'STD','Standard Room',2,2800.00),(7,2,'DLX','Deluxe Room',3,4500.00),(8,2,'SUI','Suite',4,7000.00),(9,2,'FAM','Family Deluxe',5,6000.00),(10,2,'BUS','Business Room',2,5000.00),(11,3,'STD','Standard King',2,3200.00),(12,3,'DLX','Deluxe Twin',2,4800.00),(13,3,'SUI','Luxury Suite',3,9200.00),(14,3,'EXE','Executive Room',2,5600.00),(15,3,'PEN','Penthouse Suite',4,15000.00),(16,4,'STD','Standard Economy',2,2500.00),(17,4,'DLX','Deluxe Room',3,4200.00),(18,4,'EXE','Executive King',2,6000.00),(19,4,'FAM','Family Room',5,6800.00),(20,4,'SUI','Premium Suite',4,9900.00);
+/*!40000 ALTER TABLE `room_type` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -58,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-09-23  9:12:32
+-- Dump completed on 2025-10-04 21:47:06

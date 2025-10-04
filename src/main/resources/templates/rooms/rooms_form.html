@@ -1,11 +1,14 @@
+<!-- Thymeleaf fragment for adding/editing rooms -->
 <div th:fragment="roomsForm">
+    <!-- Centered container -->
     <div class="form-container" style="max-width: 400px;"> <!-- Compact width -->
+        <!-- Dynamic Title -->
         <h2 class="mb-1 text-primary text-center" th:text="${room.id == null} ? 'Add Room' : 'Edit Room'"></h2>
-
+        <!-- Error Alert -->
         <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
-
+        <!-- Form starts here -->
         <form class="mt-3" onsubmit="submitForm(event, 'rooms')" th:object="${room}">
-
+            <!-- Hidden ID field-->
             <input th:field="*{id}" type="hidden"/>
 
             <!-- Hotel -->
