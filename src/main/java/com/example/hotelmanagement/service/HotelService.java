@@ -1,15 +1,13 @@
 package com.example.hotelmanagement.service;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.example.hotelmanagement.entity.Hotel;
+import com.example.hotelmanagement.entity.User;
+import com.example.hotelmanagement.repository.HotelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.example.hotelmanagement.entity.Hotel;
-import com.example.hotelmanagement.repository.HotelRepository;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HotelService {
@@ -24,7 +22,6 @@ public class HotelService {
     public Optional<Hotel> findHotelById(Long id) {
         return hotelRepository.findById(id);
     }
-
 
     public Hotel saveHotel(Hotel hotel) {
         return hotelRepository.save(hotel);
@@ -48,15 +45,21 @@ public class HotelService {
                 name, address, phone, timezone);
 	}
 
-    // Find hotel for pagination and searching
-    public Page<Hotel> findByNameContainingIgnoreCaseOrAddressContainingIgnoreCase(String name, String address, Pageable pageable) {
-    	return hotelRepository.findByNameContainingIgnoreCaseOrAddressContainingIgnoreCase(
-                name, address, pageable);
-	}
-
-    // Returns the total number of hotels
-    public long count() {
-		 return hotelRepository.count(); // Repository provides count()
-	}
+    public List<Hotel> getHotelsForUser(User user) {
+        if (user.getRoles().stream().anyMatch(r -> r.getName().equals("ADMIN"))) {
+            // Admin sees all hotels
+            return hotelRepository.findAll();
+        } else if (user.getRoles().stream().anyMatch(r -> r.getName().equals("MANAGER"))) {
+            // Manager: implement logic for assigned hotels
+            return hotelRepository.findByManagersContains(user);
+        } else if (user.getRoles().stream().anyMatch(r -> r.getName().equals("RECEPTIONIST")
+                || r.getName().equals("FRONT_DESK")
+                || r.getName().equals("HOUSEKEEPING"))) {
+            // Staff: only assigned hotel
+            return hotelRepository.findByStaffContains(user);
+        } else {
+            return List.of(); // Customers or unassigned
+        }
+    }
 
 }

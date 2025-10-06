@@ -21,7 +21,7 @@ public class CustomerController {
     // Return customers list fragment
     @GetMapping
     public String listCustomers(Model model) {
-        model.addAttribute("customers", customerService.findAll());
+        model.addAttribute("customers", customerService.getAllCustomers());
         return "customers/customers_list"; // return fragment
     }
 
@@ -36,14 +36,14 @@ public class CustomerController {
     @PostMapping("/create")
     @ResponseBody
     public ResponseEntity<Customer> createCustomer(@ModelAttribute Customer customer) {
-        customerService.save(customer);
+        customerService.saveCustomer(customer);
         return ResponseEntity.ok().build(); // let JS reload the list
     }
 
     // Show edit form
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        Customer customer = customerService.findById(id)
+        Customer customer = customerService.getCustomerById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" + id));
         model.addAttribute("customer", customer);
         return "customers/customers_form"; // return fragment
@@ -51,7 +51,7 @@ public class CustomerController {
 
     @GetMapping("/update/{id}")
     public String showUpdateForm(@PathVariable Long id, Model model) {
-        Customer customer = customerService.findById(id)
+        Customer customer = customerService.getCustomerById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" + id));
         model.addAttribute("customer", customer);
         return "customers/customers_form"; // form to edit
@@ -60,7 +60,7 @@ public class CustomerController {
     // Handle update
     @PostMapping("/update")
     public String updateCustomer(@ModelAttribute Customer customer) {
-        customerService.save(customer);
+        customerService.saveCustomer(customer);
         return "redirect:/customers/customers_list";
     }
 
@@ -69,7 +69,7 @@ public class CustomerController {
     @ResponseBody
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
         try {
-            customerService.deleteById(id);
+            customerService.deleteCustomerById(id);
             return ResponseEntity.ok().build();
         } catch (DataIntegrityViolationException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();

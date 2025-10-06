@@ -19,7 +19,7 @@
                         <th class="col-medium col-wrap">Name</th>
                         <th class="col-large col-wrap">Address</th>
                         <th class="col-small">Phone</th>
-                        <th class="col-small">Timezone</th>
+                        <th class="col-timezone">Timezone</th>
                         <th class="col-action">Actions</th>
                     </tr>
                     </thead>
@@ -29,7 +29,7 @@
                         <td class="col-medium col-wrap" th:text="${hotel.name}"></td>
                         <td class="col-large col-wrap" th:text="${hotel.address}"></td>
                         <td class="col-small" th:text="${hotel.phone}"></td>
-                        <td class="col-small" th:text="${hotel.timezone}"></td>
+                        <td class="col-timezone" th:text="${hotel.timezone}"></td>
                         <td class="col-action">
                             <a class="btn btn-sm btn-warning" href="#"
                                th:onclick="'loadForm(\'hotels\', ' + ${hotel.id} + ')'">

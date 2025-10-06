@@ -27,11 +27,22 @@ public class HousekeepingEventService {
         return housekeepingEventRepository.findActiveRoomIds();
     }
 
-    public void saveHousekeepingEvent(HousekeepingEvent housekeepingEvent) {
-        housekeepingEventRepository.save(housekeepingEvent);
+    public HousekeepingEvent saveHousekeepingEvent(HousekeepingEvent housekeepingEvent) {
+       return housekeepingEventRepository.save(housekeepingEvent);
     }
 
-    public void deleteById(Long id) {
+    public void deleteHouseKeepingEventById(Long id) {
         housekeepingEventRepository.deleteById(id);
+    }
+
+    public HousekeepingEvent updateHousekeepingEventStatus(Long id, String completed) {
+        Optional<HousekeepingEvent> optionalEvent = housekeepingEventRepository.findById(id);
+        if (optionalEvent.isPresent()) {
+            HousekeepingEvent event = optionalEvent.get();
+            event.setStatus(completed);
+            return housekeepingEventRepository.save(event);
+        } else {
+            throw new RuntimeException("Housekeeping event not found with id: " + id);
+        }
     }
 }

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org" lang="en">
+<meta charset="UTF-8">
+        <title>Logout - Hotel Management System</title>
+        <link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+        <!-- CSS Styles -->
+        <th:block th:replace="~{fragments/styles :: styles}"></th:block>
+    <body>
+        <!-- Navbar -->
+        <div th:replace="fragments/navbar :: navbar"></div>
+
+        <!-- Main Content -->
+        <div class="container d-flex justify-content-center align-items-center vh-100">
+            <div class="card shadow-lg border-0 rounded-4 p-4 text-center" style="max-width: 400px;">
+                <div class="card-body">
+                    <h3 class="mb-3 text-primary fw-bold">Logged Out Successfully</h3>
+                    <p class="text-muted">You have been securely logged out of the system.</p>
+                    <a th:href="@{/login}" class="btn btn-primary mt-3 px-4">Login Again</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div th:replace="fragments/footer :: footer"></div>
+
+    </body>
+</html>

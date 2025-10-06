@@ -23,8 +23,8 @@ public class PaymentService {
         return payment.orElse(null);  // Return null if not found
     }
 
-    public void savePayment(Payment payment) {
-        paymentRepository.save(payment);
+    public Payment savePayment(Payment payment) {
+       return paymentRepository.save(payment);
     }
 
     public void deletePayment(Long id) {

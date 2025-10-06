@@ -2,9 +2,9 @@ package com.example.hotelmanagement.controller;
 
 import com.example.hotelmanagement.entity.Staff;
 import com.example.hotelmanagement.service.HotelService;
+import com.example.hotelmanagement.service.RoleService;
 import com.example.hotelmanagement.service.StaffService;
 import com.example.hotelmanagement.service.UserService;
-import com.example.hotelmanagement.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -35,7 +35,7 @@ public class StaffController {
      */
     @GetMapping
     public String listStaff(Model model) {
-        List<Staff> staffList = staffService.findAll();
+        List<Staff> staffList = staffService.findAllStaffs();
         model.addAttribute("staffList", staffList);
         return "staffs/staffs_list";
     }
@@ -66,7 +66,7 @@ public class StaffController {
      */
     @GetMapping("/edit/{id}")
     public String editStaff(@PathVariable Long id, Model model) {
-        staffService.findById(id).ifPresent(staff -> {
+        staffService.findStaffById(id).ifPresent(staff -> {
             model.addAttribute("staff", staff);
             model.addAttribute("users", userService.findAll());
             model.addAttribute("roles", roleService.findAll());

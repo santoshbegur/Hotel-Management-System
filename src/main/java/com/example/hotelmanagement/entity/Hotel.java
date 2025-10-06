@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.util.Set;
+
 //Entity Highlights
 //@Entity and @Table with a unique constraint on (name, address, phone, timezone) is good for avoiding duplicate hotels.
 //@Data from Lombok generates getters, setters, equals, hashCode, and toString.
@@ -40,5 +43,21 @@ public class Hotel {
     private String timezone;
 
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private java.time.LocalDateTime createdAt;
+    private LocalDateTime createdAt;
+
+    @ManyToMany
+    @JoinTable(
+            name = "hotel_manager",
+            joinColumns = @JoinColumn(name = "hotel_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> managers;
+
+    @ManyToMany
+    @JoinTable(
+            name = "hotel_staff",
+            joinColumns = @JoinColumn(name = "hotel_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> staff;
 }

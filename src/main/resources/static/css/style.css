@@ -540,6 +540,7 @@ input[type=number] {
 .col-res-id     { width: 30px; }   /* small ID column */
 .col-room     { width: 33px; }   /* small ID column */
 .col-small     { width: 85px; }  /* small columns like phone, timezone */
+.col-timezone     { width: 92px; }  /* small columns like phone, timezone */
 .col-status     { width: 75px; }  /* small columns like phone, timezone */
 .col-small-medium     { width: 100px; }  /* medium columns like name, hotel name */
 .col-date     { width: 60px; }  /* medium columns like date */

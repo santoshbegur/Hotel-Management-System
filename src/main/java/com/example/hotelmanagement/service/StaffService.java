@@ -15,14 +15,10 @@ public class StaffService {
     @Autowired
     private final StaffRepository staffRepository;
 
-    public List<Staff> findAll() {
+    public List<Staff> findAllStaffs() {
         return staffRepository.findAll();
     }
-
-    public Optional<Staff> findById(Long id) {
-        return staffRepository.findById(id);
-    }
-
+    public Optional<Staff> findStaffById(Long id) {return staffRepository.findById(id);}
     public void saveStaff(Staff staff) {
         staffRepository.save(staff);
     }

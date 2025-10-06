@@ -44,7 +44,7 @@ public class ReservationController {
     public String showCreateForm(Model model) {
         Reservation reservation = new Reservation();
         model.addAttribute("reservation", reservation);
-        model.addAttribute("customers", customerService.findAll());
+        model.addAttribute("customers", customerService.getAllCustomers());
         model.addAttribute("hotels", hotelService.findAllHotels());
         model.addAttribute("formAction", "/reservations/create");
         return "reservations/reservations_form";
@@ -66,7 +66,7 @@ public class ReservationController {
             throw new IllegalArgumentException("Invalid reservation ID: " + id);
         }
         model.addAttribute("reservation", reservation);
-        model.addAttribute("customers", customerService.findAll());
+        model.addAttribute("customers", customerService.getAllCustomers());
         model.addAttribute("hotels", hotelService.findAllHotels());
         return "reservations/reservations_form";
     }

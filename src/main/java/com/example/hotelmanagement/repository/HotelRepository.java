@@ -1,10 +1,12 @@
 package com.example.hotelmanagement.repository;
 
 import com.example.hotelmanagement.entity.Hotel;
+import com.example.hotelmanagement.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
@@ -19,4 +21,10 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
     // Find hotel for pagination and searching
     Page<Hotel> findByNameContainingIgnoreCaseOrAddressContainingIgnoreCase(String name, String address, Pageable pageable);
+
+    // Find hotels where this user is a manager
+    List<Hotel> findByManagersContains(User user);
+
+    // Find hotels where this user is assigned as staff (receptionist, housekeeping, etc.)
+    List<Hotel> findByStaffContains(User user);
 }

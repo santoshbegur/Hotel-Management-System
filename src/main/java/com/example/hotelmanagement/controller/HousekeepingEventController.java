@@ -40,7 +40,7 @@ public class HousekeepingEventController {
     public String showCreateForm(Model model) {
         model.addAttribute("housekeepingEvent", new HousekeepingEvent());
         model.addAttribute("rooms", roomService.findAllRooms());
-        model.addAttribute("staffList", staffService.findAll());
+        model.addAttribute("staffList", staffService.findAllStaffs());
         model.addAttribute("activeRoomIds", housekeepingEventService.findActiveRoomIds());
         return "housekeeping/housekeeping_form";
     }
@@ -61,7 +61,7 @@ public class HousekeepingEventController {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid event Id: " + id));
         model.addAttribute("housekeepingEvent", event);
         model.addAttribute("rooms", roomService.findAllRooms());
-        model.addAttribute("staffList", staffService.findAll());
+        model.addAttribute("staffList", staffService.findAllStaffs());
         model.addAttribute("activeRoomIds", housekeepingEventService.findActiveRoomIds()
                 .stream().filter(rid -> !rid.equals(event.getRoom().getId())).toList());
         return "housekeeping/housekeeping_form";
@@ -77,20 +77,6 @@ public class HousekeepingEventController {
         return "redirect:/housekeeping/housekeeping_list";
     }
 
-    // Delete item
-    @DeleteMapping("/delete/{id}")
-    @ResponseBody
-    public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
-        try {
-            housekeepingEventService.deleteById(id);
-            return ResponseEntity.ok().build();
-        } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
     // --- Helper methods ---
     private void loadRoomAndStaff(HousekeepingEvent event) throws RuntimeException {
         if (event.getRoom() == null || event.getRoom().getId() == null) {
@@ -101,7 +87,7 @@ public class HousekeepingEventController {
         event.setRoom(room);
 
         if (event.getHandledBy() != null && event.getHandledBy().getId() != null) {
-            Staff staff = staffService.findById(event.getHandledBy().getId())
+            Staff staff = staffService.findStaffById(event.getHandledBy().getId())
                     .orElseThrow(() -> new RuntimeException("Staff not found"));
             event.setHandledBy(staff);
         }
@@ -118,7 +104,7 @@ public class HousekeepingEventController {
 
         // Load Staff
         if (updatedEvent.getHandledBy() != null && updatedEvent.getHandledBy().getId() != null) {
-            Staff staff = staffService.findById(updatedEvent.getHandledBy().getId())
+            Staff staff = staffService.findStaffById(updatedEvent.getHandledBy().getId())
                     .orElseThrow(() -> new RuntimeException("Staff not found"));
             existingEvent.setHandledBy(staff);
         } else {
@@ -127,6 +113,20 @@ public class HousekeepingEventController {
 
         // Status
         existingEvent.setStatus(updatedEvent.getStatus());
+    }
+
+    // Delete item
+    @DeleteMapping("/delete/{id}")
+    @ResponseBody
+    public ResponseEntity<Void> deleteHouseKeepingEvent(@PathVariable Long id) {
+        try {
+            housekeepingEventService.deleteHouseKeepingEventById(id);
+            return ResponseEntity.ok().build();
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
 
