@@ -1,6 +1,5 @@
 package com.example.hotelmanagement.controller;
 
-import com.example.hotelmanagement.entity.Role;
 import com.example.hotelmanagement.security.service.model.CustomUserDetails;
 import com.example.hotelmanagement.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,27 +14,7 @@ import java.util.stream.Collectors;
 @Controller
 public class DashboardController {
     @Autowired
-    HotelService hotelService = new HotelService(); // Placeholder for actual service
-
-    @GetMapping("/dashboard/fragment")
-    public String dashboardFragment(Authentication authentication, Model model) {
-        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-
-        // Add user and hotels
-        model.addAttribute("user", user);
-        model.addAttribute("hotels", hotelService.getHotelsForUser(user.getUser()));
-        model.addAttribute("selectedHotel", null);
-
-        // Determine primary role dynamically
-        String primaryRole = user.getRoles().stream()
-                .map(Role::getName) // ensure it matches your DB role names
-                .findFirst()
-                .orElse("GENERIC");
-        model.addAttribute("role", primaryRole);
-
-        return "fragments/dashboard/role_content :: contentFragment";
-    }
-
+    HotelService hotelService = new HotelService();
 
     @GetMapping("/index")
     public String dashboard(Model model, Authentication authentication) {
@@ -54,7 +33,4 @@ public class DashboardController {
         model.addAttribute("selectedHotel", null); // or your default selection
         return "index";
     }
-
-
-
 }

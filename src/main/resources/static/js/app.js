@@ -243,38 +243,3 @@ if (paymentForm) {
         generateTransactionId(reservationId);
     });
 }
-
-
-$(document).ready(function() {
-    $.ajax({
-        url: '/dashboard/fragment',
-        method: 'GET',
-        success: function(data) {
-            $('#content').html(data);
-        },
-        error: function(xhr, status, error) {
-            $('#content').html('<div class="alert alert-danger">Failed to load dashboard.</div>');
-        }
-    });
-});
-
-
-function loadRoleContent(url) {
-    $("#loader").show();  // Show loader
-    $("#content").hide();
-
-    $.ajax({
-        url: url,
-        type: "GET",
-        success: function(data) {
-            $("#content").html(data);  // Inject HTML
-        },
-        error: function() {
-            $("#content").html("<p>Error loading content.</p>");
-        },
-        complete: function() {
-            $("#loader").hide();     // Hide loader
-            $("#content").show();
-        }
-    });
-}

@@ -500,7 +500,7 @@ input[type=number]::-webkit-inner-spin-button {
 
 /* Firefox */
 input[type=number] {
-    -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 /* =========================================================
@@ -546,7 +546,7 @@ input[type=number] {
 .col-date     { width: 60px; }  /* medium columns like date */
 .col-amount     { width: 60px; }  /* large columns like amount */
 .col-medium     { width: 160px; }  /* medium columns like name */
-.col-large     { width: 260px; }  /* large columns like address */
+.col-large     { width: 255px; }  /* large columns like address */
 .col-transaction     { width: 180px; }  /* large columns like address */
 .col-action { width: 100px; }  /* action buttons column */
 
