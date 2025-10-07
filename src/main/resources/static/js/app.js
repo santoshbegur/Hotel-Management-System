@@ -49,7 +49,7 @@ $(".nav-click").click(function (e) {
 // Load module list
 function loadList(moduleName) {
     hideHomeContent();
-    const url = `/${moduleName}/${moduleName}_list`;
+    let url = `/${moduleName}/${moduleName}_list`;
     fetch(url)
         .then(resp => resp.text())
         .then(html => {
@@ -243,3 +243,246 @@ if (paymentForm) {
         generateTransactionId(reservationId);
     });
 }
+
+/* =========================================================
+   Admin Report Loading
+========================================================= */
+function loadReport(moduleName) {
+    hideHomeContent();
+
+    // Load the report fragment first
+    let url = `/reports/${moduleName}_list`; // fallback fragment URL
+
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('content').innerHTML = html;
+            showContent();
+            if (moduleName === 'reports') {
+                const waitForInputs = setInterval(() => {
+                    const startInput = document.getElementById('startDate');
+                    const endInput = document.getElementById('endDate');
+                    const rangeSelect = document.getElementById('rangeSelect');
+                    if (startInput && endInput && rangeSelect) {
+                        clearInterval(waitForInputs);
+                        initializeDateRange();
+                        attachReportFormHandler();
+                    }
+                }, 50);
+            }
+        })
+        .catch(err => alert("Error loading report page: " + err));
+}
+
+
+/* =========================================================
+   Admin Report Loading with Export
+========================================================= */
+document.addEventListener('DOMContentLoaded', () => {
+    initializeDateRange();
+    attachReportFormHandler();
+});
+
+// ==============================
+// Initialize Date Range Inputs
+// ==============================
+function initializeDateRange() {
+    const startInput = document.getElementById('startDate');
+    const endInput = document.getElementById('endDate');
+    const rangeSelect = document.getElementById('rangeSelect');
+
+    if (!startInput || !endInput || !rangeSelect) return;
+
+    const today = new Date();
+
+    const formatDate = (date) => {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    };
+
+    startInput.max = formatDate(today);
+    endInput.max = formatDate(today);
+
+    function setDateRange(rangeType) {
+        const end = new Date(today);
+        const start = new Date(today);
+
+        switch (rangeType) {
+            case 'daily':
+                break;
+            case 'weekly':
+                start.setDate(end.getDate() - 7);
+                break;
+            case 'monthly':
+                start.setMonth(end.getMonth() - 1);
+                break;
+            case 'yearly':
+                start.setFullYear(end.getFullYear() - 1);
+                break;
+            default:
+                start.setDate(end.getDate() - 7);
+        }
+
+        startInput.value = formatDate(start);
+        endInput.value = formatDate(end);
+    }
+
+    setDateRange(rangeSelect.value);
+
+    // Update dates when dropdown changes
+    rangeSelect.addEventListener('change', function () {
+        setDateRange(this.value);
+    });
+}
+
+// ==============================
+// Form Submission (Generate Report)
+// ==============================
+function attachReportFormHandler() {
+    const form = document.getElementById('reportForm');
+    if (!form) return;
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const startDate = document.getElementById('startDate')?.value;
+        const endDate = document.getElementById('endDate')?.value;
+        const reportType = document.getElementById('reportType')?.value;
+
+        if (!startDate || !endDate || !reportType) {
+            alert('Please select valid dates and report type.');
+            return;
+        }
+
+        const url = `/reports/${reportType}_list?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
+
+        fetch(url)
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('reportResult').innerHTML = html;
+                // Initialize DataTable for search, pagination, sorting
+                const table = $('#reportResult table');
+                if (table.length) {
+                    // Destroy previous instance if exists (for repeated loads)
+                    if ($.fn.DataTable.isDataTable(table)) {
+                        table.DataTable().destroy();
+                    }
+
+                    table.DataTable({
+                        paging: true,             // pagination
+                        searching: true,          // search/filter
+                        ordering: true,           // column sorting
+                        info: true,               // table info
+                        pageLength: 10,           // default rows per page
+                        lengthMenu: [5, 10, 15, 30, 365, 10000], // rows per page options
+                        columnDefs: [{orderable: true}]
+                    });
+                    // Style the search input + add placeholder dynamically
+                    let placeholderText = `Type to search..`;
+                    $('.dataTables_filter input')
+                        .attr("placeholder", placeholderText)
+                        .css({
+                            width: '250px',             // wider input
+                            display: 'inline-block',    // inline-block
+                            marginLeft: '0.5rem',       // spacing
+                            border: '1px solid black',   // blue border
+                            borderRadius: '6px',        // optional, makes it smooth
+                            color: 'black'              // text color
+                        });
+                    // Style length dropdown
+                    $('.dataTables_length select')
+                        .css({
+                            width: '70px',       // adjust width as needed
+                            display: 'inline-block',
+                            marginLeft: '0.5rem',
+                            border: '1px solid black',
+                            borderRadius: '6px',
+                            padding: '2px 4px',
+                            color: 'black'
+                        });
+                }
+
+                attachExportHandlers(); // Attach export buttons now that table exists
+            })
+            .catch(err => alert("Error fetching " + reportType + " report: " + err));
+    });
+}
+
+// ==============================
+// Export Handlers
+// ==============================
+function attachExportHandlers() {
+    const exportExcelBtn = document.getElementById('exportExcel');
+    const exportPdfBtn = document.getElementById('exportPdf');
+    const reportTable = document.querySelector('#reportResult table');
+
+    if (!reportTable || !exportExcelBtn || !exportPdfBtn) return;
+
+    // Remove old listeners to avoid duplicates
+    exportExcelBtn.replaceWith(exportExcelBtn.cloneNode(true));
+    exportPdfBtn.replaceWith(exportPdfBtn.cloneNode(true));
+
+    const newExcelBtn = document.getElementById('exportExcel');
+    const newPdfBtn = document.getElementById('exportPdf');
+
+    // --- Export Excel ---
+    newExcelBtn.addEventListener('click', () => {
+        let csv = [];
+        for (let row of reportTable.rows) {
+            let cols = [];
+            for (let cell of row.cells) cols.push(`"${cell.innerText}"`);
+            csv.push(cols.join(','));
+        }
+        const csvFile = new Blob([csv.join('\n')], {type: 'text/csv'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(csvFile);
+        a.download = `${document.getElementById('reportType').value}_${document.getElementById('startDate').value}_to_${document.getElementById('endDate').value}.csv`;
+        a.click();
+    });
+
+    // --- Export PDF ---
+    newPdfBtn.addEventListener('click', () => {
+        const reportTable = document.querySelector('#reportResult table');
+        if (!reportTable) {
+            alert('No table found for export!');
+            return;
+        }
+
+        const reportType = document.getElementById('reportType').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const reportTitle = `${capitalizeFirstLetter(reportType)} Report`;
+
+        const opt = {
+            margin: 10,
+            filename: `${reportType}_${startDate}_to_${endDate}.pdf`,
+            image: {type: 'jpeg', quality: 0.98},
+            html2canvas: {scale: 2},
+            jsPDF: {unit: 'mm', format: 'a4', orientation: 'portrait'}
+        };
+
+        // Add a temporary heading for PDF export
+        const clonedTable = reportTable.cloneNode(true);
+        const wrapper = document.createElement('div');
+        const titleEl = document.createElement('h3');
+        titleEl.innerText = reportTitle;
+        titleEl.style.textAlign = 'center';
+        wrapper.appendChild(titleEl);
+        wrapper.appendChild(clonedTable);
+
+        html2pdf().set(opt).from(wrapper).save();
+    });
+
+    /**
+     * Capitalize first letter of a string (safe).
+     * Place this near the top of your app.js before it's used.
+     */
+    function capitalizeFirstLetter(str) {
+        if (!str || typeof str !== 'string') return '';
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+}
+

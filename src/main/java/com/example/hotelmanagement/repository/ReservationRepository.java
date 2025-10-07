@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,5 +24,12 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             @Param("id") Long id
     );
 
-    Optional<Reservation> getReservationById(Long id);
+    // Revenue report for date range
+    @Query("SELECT r FROM Reservation r WHERE r.checkInDate BETWEEN :start AND :end")
+    List<Reservation> findReservationsBetweenDates(LocalDate start, LocalDate end);
+
+    // All active reservations for a specific date (for occupancy)
+    @Query("SELECT r FROM Reservation r WHERE :date BETWEEN r.checkInDate AND r.checkOutDate")
+    List<Reservation> findActiveReservationsOnDate(LocalDate date);
+
 }

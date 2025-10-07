@@ -402,7 +402,7 @@ td.d-flex > .btn + .btn {
 }
 
 .navbar-brand {
-    padding: 0 80px; /* top/bottom: 1px, left/right: 30px */
+    padding: 0 10px; /* top/bottom: 1px, left/right: 30px */
     font-size: 1.2rem; /* optional: increase font size */
     font-weight: 300; /* optional: make it bolder */
 }

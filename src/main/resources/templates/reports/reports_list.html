@@ -1,0 +1,47 @@
+<div class="container mt-4">
+    <h2 class="mb-3">Reports</h2>
+
+    <form id="reportForm" onsubmit="event.preventDefault(); loadReport('reports');">
+        <div class="row mb-3">
+            <!-- Start Date -->
+            <div class="col-md-3">
+                <label for="startDate" class="form-label">Start Date:</label>
+                <input type="date" id="startDate" name="startDate" class="form-control" required>
+            </div>
+
+            <!-- End Date -->
+            <div class="col-md-3">
+                <label for="endDate" class="form-label">End Date:</label>
+                <input type="date" id="endDate" name="endDate" class="form-control" required>
+            </div>
+
+            <!-- Range Selection -->
+            <div class="col-md-3">
+                <label for="rangeSelect" class="form-label">Select Range:</label>
+                <select id="rangeSelect" class="form-select">
+                    <option value="daily">Daily</option>
+                    <option value="weekly" selected>Weekly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="yearly">Yearly</option>
+                </select>
+            </div>
+
+            <!-- Report Type -->
+            <div class="col-md-3">
+                <label for="reportType" class="form-label">Report Type:</label>
+                <select id="reportType" name="reportType" class="form-select" required>
+                    <option value="revenue" selected>Daily Revenue</option>
+                    <option value="occupancy">Occupancy</option>
+                </select>
+            </div>
+
+            <!-- Submit -->
+            <div class="col-md-2 mt-2">
+                <button type="submit" class="btn btn-primary w-70">
+                    <i class="bi bi-arrow-right"></i>Generate Report</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="reportResult" class="mt-4"></div>

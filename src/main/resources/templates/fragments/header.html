@@ -59,10 +59,17 @@
                         </a>
                     </li>
 
-                    <!-- Housekeeping - Housekeeping only -->
+                    <!-- Housekeeping - Admin/Housekeeping only -->
                     <li class="nav-item" th:if="${#authorization.expression('hasRole(''ADMIN'') or hasRole(''HOUSEKEEPING'')')}">
                         <a class="nav-link nav-click" data-target="housekeeping" href="#" onclick="showContent()">
                             <i class="bi bi-brush"></i> Housekeeping
+                        </a>
+                    </li>
+
+                    <!-- Reports - Admin only -->
+                    <li class="nav-item" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                        <a class="nav-link nav-click" data-target="reports" href="#" onclick="loadReport('reports')">
+                            <i class="bi bi-bar-chart"></i> Reports
                         </a>
                     </li>
                 </ul>
@@ -102,7 +109,6 @@
                         </li>
                     </ul>
                 </div>
-
             </div>
         </div>
     </nav>
