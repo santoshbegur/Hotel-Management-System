@@ -1,17 +1,22 @@
 package com.example.hotelmanagement.controller;
 
 import com.example.hotelmanagement.entity.Hotel;
+import com.example.hotelmanagement.security.service.model.CustomUserDetails;
+import com.example.hotelmanagement.service.HotelDataService;
 import com.example.hotelmanagement.service.HotelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -20,11 +25,19 @@ import java.util.Optional;
 public class HotelController {
     @Autowired
     private final HotelService hotelService;
-  
+    @Autowired
+    private final HotelDataService hotelDataService;
+
     @GetMapping
     public String listHotels(Model model)
     {
-    	model.addAttribute("hotels", hotelService.findAllHotels());
+        // Get logged-in user details
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        // Load hotels based on role
+        List<Hotel> hotels = hotelDataService.getHotelsForUser(userDetails);
+        // Add to model for Thymeleaf
+        model.addAttribute("hotels", hotels);
         return "hotels/hotels_list";
     }
 

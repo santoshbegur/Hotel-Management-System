@@ -1,15 +1,15 @@
 package com.example.hotelmanagement.controller;
 
 import com.example.hotelmanagement.entity.Staff;
-import com.example.hotelmanagement.service.HotelService;
-import com.example.hotelmanagement.service.RoleService;
-import com.example.hotelmanagement.service.StaffService;
-import com.example.hotelmanagement.service.UserService;
+import com.example.hotelmanagement.security.service.model.CustomUserDetails;
+import com.example.hotelmanagement.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,13 +29,18 @@ public class StaffController {
     private final RoleService roleService;
     @Autowired
     private final HotelService hotelService;
-
+    @Autowired
+    private final HotelDataService hotelDataService;
     /**
      * LIST ALL STAFF
      */
     @GetMapping
     public String listStaff(Model model) {
-        List<Staff> staffList = staffService.findAllStaffs();
+        // Get logged-in user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        // Load staff based on role and hotel assignments
+        List<Staff> staffList = hotelDataService.getStaffForUser(userDetails);
         model.addAttribute("staffList", staffList);
         return "staffs/staffs_list";
     }

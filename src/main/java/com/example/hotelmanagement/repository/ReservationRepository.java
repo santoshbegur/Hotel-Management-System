@@ -81,4 +81,17 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "LEFT JOIN FETCH rm.hotel h")
     List<Reservation> findAllWithLines();
 
+    List<Reservation> findAll(); // Admin
+
+    @Query("""
+        SELECT r FROM Reservation r
+        JOIN Staff s ON s.hotel.id = r.hotel.id
+        WHERE s.user.id = :userId
+    """)
+    List<Reservation> findByUserHotels(@Param("userId") Long userId);
+
+    List<Reservation> findByHotelIdIn(List<Long> hotelIds);
+
+    @Query("SELECT r FROM Reservation r WHERE r.customer.id = :customerId")
+    List<Reservation> findByCustomerId(@Param("customerId") Long customerId);
 }

@@ -3,10 +3,7 @@ package com.example.hotelmanagement.controller;
 import com.example.hotelmanagement.entity.Reservation;
 import com.example.hotelmanagement.entity.ReservationLine;
 import com.example.hotelmanagement.security.service.model.CustomUserDetails;
-import com.example.hotelmanagement.service.CustomerService;
-import com.example.hotelmanagement.service.HotelService;
-import com.example.hotelmanagement.service.ReservationService;
-import com.example.hotelmanagement.service.RoomService;
+import com.example.hotelmanagement.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -34,17 +31,15 @@ public class ReservationController {
     private final RoomService roomService;
     @Autowired
     private final HotelService hotelService;
-
+    @Autowired
+    private final HotelDataService hotelDataService;
     // List all reservations
     @GetMapping
     public String listReservations(Model model) {
         // Get logged-in user
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-
-        // Fetch reservations for this user
-        List<Reservation> reservations = reservationService.getReservationsForCurrentUser(userDetails);
-
+        List<Reservation> reservations = hotelDataService.getReservationsForUser(userDetails);
         model.addAttribute("reservations", reservations);
         return "reservations/reservations_list";
     }
@@ -103,6 +98,10 @@ public class ReservationController {
             List<ReservationLine> lines = new ArrayList<>();
             lines.add(new ReservationLine());
             reservation.setReservationLines(lines);
+        }
+        // Ensure parent reference
+        for (ReservationLine line : reservation.getReservationLines()) {
+            line.setReservation(reservation);
         }
 
         model.addAttribute("reservation", reservation);

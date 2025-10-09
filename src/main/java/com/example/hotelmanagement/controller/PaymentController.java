@@ -1,36 +1,48 @@
 package com.example.hotelmanagement.controller;
 
 import com.example.hotelmanagement.entity.Payment;
+import com.example.hotelmanagement.security.service.model.CustomUserDetails;
+import com.example.hotelmanagement.service.HotelDataService;
 import com.example.hotelmanagement.service.PaymentService;
 import com.example.hotelmanagement.service.ReservationService;
 import com.example.hotelmanagement.util.TransactionIdGenerator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/payments/payments_list")
+@RequiredArgsConstructor
 public class PaymentController {
-
     @Autowired
     private PaymentService paymentService;
-
     @Autowired
     private ReservationService reservationService;
+    @Autowired
+    private final HotelDataService hotelDataService;
 
-    // ✅ List payments
+    // List payments
     @GetMapping
     public String listPayments(Model model) {
-        model.addAttribute("payments", paymentService.getAllPayments());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        List<Payment> payments = hotelDataService.getPaymentsForUser(userDetails);
+        model.addAttribute("payments", payments);
         return "payments/payments_list";  // list fragment
     }
 
-    // ✅ Show create payment form
+    // Show create payment form
     @GetMapping("/create")
     public String createPaymentForm(Model model) {
         model.addAttribute("payment", new Payment());   // singular (not "payments")
@@ -38,7 +50,7 @@ public class PaymentController {
         return "payments/payments_form";  // should load form fragment
     }
 
-    // ✅ Save or update payment
+    // Save or update payment
     @PostMapping("/create")
     public String savePayment(@ModelAttribute("payment") Payment payment) {
         // Only generate transaction ID if it's a new payment
@@ -51,7 +63,7 @@ public class PaymentController {
         return "redirect:/payments/payments_list";
     }
 
-    // ✅ Show edit payment form
+    // Show edit payment form
     @GetMapping("/edit/{id}")
     public String editPaymentForm(@PathVariable Long id, Model model) {
         Payment payment = paymentService.getPaymentById(id);
@@ -75,7 +87,7 @@ public class PaymentController {
         return "redirect:/payments/payments_list";
     }
 
-    // ✅ Delete payment
+    // Delete payment
     @DeleteMapping("/delete/{id}")
     @ResponseBody
     public ResponseEntity<Void> deletePayment(@PathVariable Long id) {

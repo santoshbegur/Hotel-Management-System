@@ -1,15 +1,21 @@
 package com.example.hotelmanagement.controller;
 
 import com.example.hotelmanagement.entity.Customer;
+import com.example.hotelmanagement.security.service.model.CustomUserDetails;
 import com.example.hotelmanagement.service.CustomerService;
+import com.example.hotelmanagement.service.HotelDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/customers/customers_list")
@@ -17,11 +23,17 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerController {
     @Autowired
     private final CustomerService customerService;
+    @Autowired
+    private final HotelDataService hotelDataService;
 
     // Return customers list fragment
     @GetMapping
     public String listCustomers(Model model) {
-        model.addAttribute("customers", customerService.getAllCustomers());
+        // Get logged-in user details
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        List<Customer> customers = hotelDataService.getCustomersForUser(userDetails);
+        model.addAttribute("customers", customers);
         return "customers/customers_list"; // return fragment
     }
 

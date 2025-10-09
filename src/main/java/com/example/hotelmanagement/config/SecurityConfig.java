@@ -15,20 +15,19 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
-
+    // Inject custom user details service and authentication success handler
     private final CustomUserDetailsService userDetailsService;
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
-
+    // Define security filter chain with role-based access control and custom login/logout handling
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(auth -> auth
+        http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/login", "/register").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/manager/**").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers("/frontdesk/**").hasAnyRole("ADMIN", "FRONT_DESK", "RECEPTIONIST")
-                        .requestMatchers("/housekeeping/**").hasAnyRole("ADMIN", "HOUSEKEEPING", "CLEANING_SUPERVISOR")
+                        .requestMatchers("/housekeeping/**").hasAnyRole("ADMIN", "HOUSEKEEPING", "CLEANING_SUPERVISOR","CUSTOMER")
                         .requestMatchers("/chef/**").hasAnyRole("ADMIN", "CHEF")
                         .requestMatchers("/account/**").hasAnyRole("ADMIN", "ACCOUNTANT", "MANAGER")
                         .anyRequest().authenticated()
@@ -48,17 +47,15 @@ public class SecurityConfig {
                         .accessDeniedPage("/access-denied")
                 )
                 .userDetailsService(userDetailsService);
-
-
         return http.build();
     }
-
+    // Define password encoder (NoOp for simplicity; use BCrypt in production)
     @Bean
     public PasswordEncoder passwordEncoder() {
         // return new BCryptPasswordEncoder();
         return NoOpPasswordEncoder.getInstance();
     }
-
+    // Expose authentication manager bean
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManager.class);

@@ -3,6 +3,8 @@ package com.example.hotelmanagement.controller;
 import com.example.hotelmanagement.entity.HousekeepingEvent;
 import com.example.hotelmanagement.entity.Room;
 import com.example.hotelmanagement.entity.Staff;
+import com.example.hotelmanagement.security.service.model.CustomUserDetails;
+import com.example.hotelmanagement.service.HotelDataService;
 import com.example.hotelmanagement.service.HousekeepingEventService;
 import com.example.hotelmanagement.service.RoomService;
 import com.example.hotelmanagement.service.StaffService;
@@ -11,11 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
 @RequestMapping("/housekeeping/housekeeping_list")
@@ -27,11 +32,17 @@ public class HousekeepingEventController {
     private final RoomService roomService;
     @Autowired
     private final StaffService staffService;
+    @Autowired
+    private final HotelDataService hotelDataService;
 
     // List all housekeeping events
     @GetMapping
     public String listEvents(Model model) {
-        model.addAttribute("events", housekeepingEventService.findAll());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        List<HousekeepingEvent> events = hotelDataService.getHousekeepingForUser(userDetails);
+        model.addAttribute("events", events);
         return "housekeeping/housekeeping_list";
     }
 

@@ -3,6 +3,8 @@ package com.example.hotelmanagement.controller;
 import com.example.hotelmanagement.entity.Hotel;
 import com.example.hotelmanagement.entity.Room;
 import com.example.hotelmanagement.entity.RoomType;
+import com.example.hotelmanagement.security.service.model.CustomUserDetails;
+import com.example.hotelmanagement.service.HotelDataService;
 import com.example.hotelmanagement.service.HotelService;
 import com.example.hotelmanagement.service.RoomService;
 import com.example.hotelmanagement.service.RoomTypeService;
@@ -11,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,13 +32,18 @@ public class RoomController {
     private final RoomTypeService roomTypeService;
     @Autowired
     private final HotelService hotelService;
+    @Autowired
+    private final HotelDataService hotelDataService;
 
     /**
      * LIST ALL ROOMS
      */
     @GetMapping
     public String listRooms(Model model) {
-        List<Room> rooms = roomService.findAllRooms();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        List<Room> rooms = hotelDataService.getRoomsForUser(userDetails);
         model.addAttribute("rooms", rooms);
         return "rooms/rooms_list";
     }

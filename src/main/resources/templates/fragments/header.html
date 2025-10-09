@@ -2,17 +2,21 @@
 <div th:fragment="header">
     <nav class="navbar navbar-expand-lg custom-navbar">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold nav-click" data-target="home" onclick="hideContent()">
-                Hotel Management System
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav" aria-controls="navbarNav"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <div class="user-info text-white px-3 py-2">
+                <div class="system-title big fw-bold" style="font-size: 1.16sem;">
+                    Hotel Management System
+                </div>
+            </div>
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav me-3">
+                    <!-- Home -->
+                    <li class="nav-item">
+                        <a class="nav-link nav-click fw-semibold home-link"
+                           data-target="home" href="#" onclick="hideContent()">
+                            <i class="bi bi-house"></i> Home
+                        </a>
+                    </li>
 
                     <!-- Hotels & Rooms - Admin/Manager only -->
                     <li class="nav-item" th:if="${#authorization.expression('hasRole(''ADMIN'') or hasRole(''MANAGER'')')}">
@@ -30,6 +34,13 @@
                     <li class="nav-item" th:if="${#authorization.expression('hasRole(''ADMIN'') or hasRole(''RECEPTIONIST'') or hasRole(''MANAGER'')')}">
                         <a class="nav-link nav-click" data-target="reservations" href="#" onclick="showContent()">
                             <i class="bi bi-calendar-check"></i> Reservations
+                        </a>
+                    </li>
+
+                    <!-- Customer Menu -->
+                    <li class="nav-item" th:if="${#authorization.expression('hasRole(''CUSTOMER'')')}">
+                        <a class="nav-link nav-click" data-target="reservations" href="#" onclick="showContent()">
+                            <i class="bi bi-card-checklist"></i> My Reservations
                         </a>
                     </li>
 
@@ -58,11 +69,20 @@
                             <i class="bi bi-credit-card"></i> Payments
                         </a>
                     </li>
-
+                    <li class="nav-item" th:if="${#authorization.expression('hasRole(''CUSTOMER'')')}">
+                        <a class="nav-link nav-click" data-target="payments" href="#" onclick="showContent()">
+                            <i class="bi bi-credit-card"></i> My Payments
+                        </a>
+                    </li>
                     <!-- Housekeeping - Admin/Housekeeping only -->
                     <li class="nav-item" th:if="${#authorization.expression('hasRole(''ADMIN'') or hasRole(''HOUSEKEEPING'')')}">
                         <a class="nav-link nav-click" data-target="housekeeping" href="#" onclick="showContent()">
                             <i class="bi bi-brush"></i> Housekeeping
+                        </a>
+                    </li>
+                    <li class="nav-item" th:if="${#authorization.expression('hasRole(''CUSTOMER'')')}">
+                        <a class="nav-link nav-click" data-target="housekeeping" href="#" onclick="showContent()">
+                            <i class="bi bi-brush"></i> My Housekeeping
                         </a>
                     </li>
 
@@ -89,15 +109,18 @@
                     <a class="d-flex align-items-center text-decoration-none text-white fw-semibold dropdown-toggle"
                        href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-person-circle me-2 fs-5 text-white"></i>
-                        <span class="fw-semibold text-white" th:text="${#authentication.name}">User</span>
+                        User: <span class="fw-semibold text-white" th:text="${#authentication.name}">User</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
-                        <li>
-                            <h6 class="dropdown-header text-secondary">Role:
-                                <span th:text="${#authentication.authorities[0].authority}">ROLE_USER</span>
-                            </h6>
+                        <li class="dropdown-header text-center py-2" style="background-color: rgba(0, 0, 0, 0.03); border-radius: 6px;">
+                            <div style="font-size: 0.9rem; font-weight: 600; color: var(--bs-primary);">
+                                <i class="bi bi-person-badge-fill me-1"></i> Role:
+                                <span th:text="${#authentication.authorities[0].authority}"
+                                      style="color: var(--bs-body-color); font-weight: 500;">ROLE_USER</span>
+                            </div>
                         </li>
-                        <li><hr class="dropdown-divider"></li>
+                        <li><hr class="dropdown-divider my-2"></li>
+
                         <!-- Logout -->
                         <li>
                             <form th:action="@{/logout}" method="post" class="m-0">
