@@ -1,8 +1,20 @@
-<div class="container mt-4">
-    <h2 class="mb-3">Reports</h2>
-
+<!-- Reports List Template -->
+<div th:fragment="reportsList">
+<div class="form-container" style="max-width: 800px;">
     <form id="reportForm" onsubmit="event.preventDefault(); loadReport('reports');">
-        <div class="row mb-3">
+        <div class="row mb-1">
+            <!-- Submit -->
+            <div class="mb-1 d-flex align-items-center">
+                <div class="text-start">
+                    <button type="submit" class="btn btn-primary w-70">
+                        <i class="bi bi-arrow-right"></i> Generate Report
+                    </button>
+                </div>
+                <div class="flex-grow-1 text-center">
+                    <h2 class="mb-0">Reports</h2>
+                </div>
+            </div>
+
             <!-- Start Date -->
             <div class="col-md-3">
                 <label for="startDate" class="form-label">Start Date:</label>
@@ -30,18 +42,12 @@
             <div class="col-md-3">
                 <label for="reportType" class="form-label">Report Type:</label>
                 <select id="reportType" name="reportType" class="form-select" required>
-                    <option value="revenue" selected>Daily Revenue</option>
-                    <option value="occupancy">Occupancy</option>
+                    <option value="revenue" selected>Revenue Report</option>
+                    <option value="occupancy">Occupancy Report</option>
                 </select>
-            </div>
-
-            <!-- Submit -->
-            <div class="col-md-2 mt-2">
-                <button type="submit" class="btn btn-primary w-70">
-                    <i class="bi bi-arrow-right"></i>Generate Report</button>
             </div>
         </div>
     </form>
 </div>
-
+</div>
 <div id="reportResult" class="mt-4"></div>

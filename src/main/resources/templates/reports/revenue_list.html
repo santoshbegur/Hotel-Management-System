@@ -1,16 +1,14 @@
 <!-- revenue_list.html Report Fragment -->
-<div th:fragment="dailyRevenueReport">
-    <div class="container mt-3">
+<div th:fragment="revenueReport">
+    <div class="form-container" style="max-width: 800px;">
        <!-- Export PDF/Excel Buttons -->
-        <div class="mb-3 d-flex align-items-center justify-content-between">
-            <h4 class="mb-0">Daily Revenue Report</h4>
+        <div class="mb-1 d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Revenue Report</h4>
             <div>
                 <button id="exportExcel" class="btn btn-success me-2">Export to Excel</button>
                 <button id="exportPdf" class="btn btn-danger">Export to PDF</button>
             </div>
         </div>
-
-
         <!-- Revenue Table -->
         <div id="revenueTableContainer" class="mt-3">
             <table class="table table-bordered">

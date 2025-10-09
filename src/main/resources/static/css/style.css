@@ -558,4 +558,30 @@ input[type=number] {
     text-overflow: clip;            /* no ellipsis when wrapping */
 }
 
+/* Ensure consistent alignment and spacing */
+#reservationsContent table th,
+#reservationsContent table td {
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+#reservationsContent table td {
+    font-size: 13px;
+    padding: 4px 8px;
+}
+
+#reservationsContent table th {
+    font-size: 13px;
+    padding: 6px 8px;
+}
+
+/* Subtle hover effect for readability */
+#reservationsContent tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Prevent button icons from shifting layout */
+.btn i {
+    vertical-align: middle;
+}
 

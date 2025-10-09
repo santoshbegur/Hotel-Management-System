@@ -375,7 +375,7 @@ function attachReportFormHandler() {
                         searching: true,          // search/filter
                         ordering: true,           // column sorting
                         info: true,               // table info
-                        pageLength: 10,           // default rows per page
+                        pageLength: 5,           // default rows per page
                         lengthMenu: [5, 10, 15, 30, 365, 10000], // rows per page options
                         columnDefs: [{orderable: true}]
                     });
@@ -442,7 +442,7 @@ function attachExportHandlers() {
         a.click();
     });
 
-    // --- Export PDF ---
+    // --- Export PDF dynamically ---
     newPdfBtn.addEventListener('click', () => {
         const reportTable = document.querySelector('#reportResult table');
         if (!reportTable) {
@@ -450,20 +450,20 @@ function attachExportHandlers() {
             return;
         }
 
-        const reportType = document.getElementById('reportType').value;
-        const startDate = document.getElementById('startDate').value;
-        const endDate = document.getElementById('endDate').value;
-        const reportTitle = `${capitalizeFirstLetter(reportType)} Report`;
+        // Get the selected report type dynamically from the filter form
+        const reportTypeInput = document.getElementById('reportType');
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
 
-        const opt = {
-            margin: 10,
-            filename: `${reportType}_${startDate}_to_${endDate}.pdf`,
-            image: {type: 'jpeg', quality: 0.98},
-            html2canvas: {scale: 2},
-            jsPDF: {unit: 'mm', format: 'a4', orientation: 'portrait'}
-        };
+        const reportType = reportTypeInput.value; // Will be 'revenue' or 'occupancy'
+        const reportTitle = `Report`;
 
-        // Add a temporary heading for PDF export
+        if (!reportTypeInput || !startDateInput || !endDateInput) {
+            alert('Missing report filter inputs!');
+            return;
+        }
+
+        // Clone the table and add a temporary heading
         const clonedTable = reportTable.cloneNode(true);
         const wrapper = document.createElement('div');
         const titleEl = document.createElement('h3');
@@ -471,18 +471,32 @@ function attachExportHandlers() {
         titleEl.style.textAlign = 'center';
         wrapper.appendChild(titleEl);
         wrapper.appendChild(clonedTable);
-
+        // PDF options
+        const opt = {
+            margin: 10,
+            filename: `${reportType}_${startDate}_to_${endDate}.pdf`,
+            image: {type: 'jpeg', quality: 0.98},
+            html2canvas: {scale: 2},
+            jsPDF: {unit: 'mm', format: 'a4', orientation: 'portrait'}
+        };
+        // Generate PDF
         html2pdf().set(opt).from(wrapper).save();
     });
+}
 
-    /**
-     * Capitalize first letter of a string (safe).
-     * Place this near the top of your app.js before it's used.
-     */
-    function capitalizeFirstLetter(str) {
-        if (!str || typeof str !== 'string') return '';
-        return str.charAt(0).toUpperCase() + str.slice(1);
+
+document.addEventListener('DOMContentLoaded', function() {
+    const nights = document.getElementById('nights');
+    const price = document.getElementById('pricePerNight');
+    const total = document.getElementById('totalAmount');
+
+    function updateTotal() {
+        const n = parseFloat(nights.value || 0);
+        const p = parseFloat(price.value || 0);
+        total.value = (n * p).toFixed(2);
     }
 
-}
+    nights.addEventListener('input', updateTotal);
+    price.addEventListener('input', updateTotal);
+});
 

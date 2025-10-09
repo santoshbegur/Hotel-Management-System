@@ -3,7 +3,6 @@ package com.example.hotelmanagement.service;
 import com.example.hotelmanagement.entity.User;
 import com.example.hotelmanagement.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    @Autowired
+
     private final UserRepository userRepository;
 
     public List<User> findAll() {
@@ -30,6 +29,7 @@ public class UserService {
     public void saveUser(User user) {
         userRepository.save(user);
     }
+
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }

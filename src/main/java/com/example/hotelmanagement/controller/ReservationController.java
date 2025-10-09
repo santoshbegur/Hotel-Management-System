@@ -1,6 +1,8 @@
 package com.example.hotelmanagement.controller;
 
 import com.example.hotelmanagement.entity.Reservation;
+import com.example.hotelmanagement.entity.ReservationLine;
+import com.example.hotelmanagement.security.service.model.CustomUserDetails;
 import com.example.hotelmanagement.service.CustomerService;
 import com.example.hotelmanagement.service.HotelService;
 import com.example.hotelmanagement.service.ReservationService;
@@ -10,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +38,13 @@ public class ReservationController {
     // List all reservations
     @GetMapping
     public String listReservations(Model model) {
-        List<Reservation> reservations = reservationService.getAllReservations();
+        // Get logged-in user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        // Fetch reservations for this user
+        List<Reservation> reservations = reservationService.getReservationsForCurrentUser(userDetails);
+
         model.addAttribute("reservations", reservations);
         return "reservations/reservations_list";
     }
@@ -43,9 +53,21 @@ public class ReservationController {
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         Reservation reservation = new Reservation();
+
+        // Ensure at least one ReservationLine exists for edit
+        if (reservation.getReservationLines() == null || reservation.getReservationLines().isEmpty()) {
+            List<ReservationLine> lines = new ArrayList<>();
+            lines.add(new ReservationLine());
+            reservation.setReservationLines(lines);
+        }
+        // Ensure parent reference
+        for (ReservationLine line : reservation.getReservationLines()) {
+            line.setReservation(reservation);
+        }
         model.addAttribute("reservation", reservation);
         model.addAttribute("customers", customerService.getAllCustomers());
         model.addAttribute("hotels", hotelService.findAllHotels());
+        model.addAttribute("rooms", roomService.findAllRooms()); // Needed for room selection
         model.addAttribute("formAction", "/reservations/create");
         return "reservations/reservations_form";
     }
@@ -53,6 +75,19 @@ public class ReservationController {
     // Handle create
     @PostMapping("/create")
     public String createReservation(@ModelAttribute Reservation reservation) {
+
+        // Ensure at least one ReservationLine exists for edit
+        if (reservation.getReservationLines() == null || reservation.getReservationLines().isEmpty()) {
+            List<ReservationLine> lines = new ArrayList<>();
+            lines.add(new ReservationLine());
+            reservation.setReservationLines(lines);
+        }
+
+        // Ensure parent reference
+        for (ReservationLine line : reservation.getReservationLines()) {
+            line.setReservation(reservation);
+        }
+
         reservationService.saveReservation(reservation);
         return "redirect:/reservations/reservations_list";
     }
@@ -62,12 +97,18 @@ public class ReservationController {
     public String showEditForm(@PathVariable Long id, Model model) {
         Reservation reservation = reservationService.getReservationById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid reservation Id:" + id));
-        if (reservation == null) {
-            throw new IllegalArgumentException("Invalid reservation ID: " + id);
+
+        // Ensure at least one ReservationLine exists for edit
+        if (reservation.getReservationLines() == null || reservation.getReservationLines().isEmpty()) {
+            List<ReservationLine> lines = new ArrayList<>();
+            lines.add(new ReservationLine());
+            reservation.setReservationLines(lines);
         }
+
         model.addAttribute("reservation", reservation);
         model.addAttribute("customers", customerService.getAllCustomers());
         model.addAttribute("hotels", hotelService.findAllHotels());
+        model.addAttribute("rooms", roomService.findAllRooms()); // Needed for room selection
         return "reservations/reservations_form";
     }
 
@@ -78,6 +119,11 @@ public class ReservationController {
         // Null-safe handling
         if (reservation.getReservationLines() == null) {
             reservation.setReservationLines(new ArrayList<>());
+        }
+
+        // Ensure parent reference
+        for (ReservationLine line : reservation.getReservationLines()) {
+            line.setReservation(reservation);
         }
 
         // Example duplicate booking check

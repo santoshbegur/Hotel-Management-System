@@ -37,4 +37,13 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "user_hotel",               // Name of the join table
+            joinColumns = @JoinColumn(name = "user_id"),   // Column referring to User
+            inverseJoinColumns = @JoinColumn(name = "hotel_id") // Column referring to Hotel
+    )
+    private Set<Hotel> hotels = new HashSet<>();
+
 }

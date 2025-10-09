@@ -9,12 +9,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-//Entity Highlights
-//@Entity and @Table with a unique constraint on (name, address, phone, timezone) is good for avoiding duplicate hotels.
-//@Data from Lombok generates getters, setters, equals, hashCode, and toString.
-//@Builder allows fluent object creation.
-//createdAt column with TIMESTAMP DEFAULT CURRENT_TIMESTAMP ensures automatic timestamp insertion on creation.
-
 @Entity
 @Table(
         name = "hotel",

@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class ReportService {
      * Generate daily revenue report for a date range
      */
     public Map<LocalDate, BigDecimal> generateDailyRevenueReport(LocalDate startDate, LocalDate endDate) {
-        Map<LocalDate, BigDecimal> dailyRevenue = new LinkedHashMap<>();
+        Map<LocalDate, BigDecimal> dailyRevenue = new ConcurrentHashMap<>();
 
         LocalDate date = startDate;
         while (!date.isAfter(endDate)) {
@@ -50,7 +50,7 @@ public class ReportService {
         List<Reservation> reservations = reservationRepository.findReservationsBetweenDates(start, end);
         long totalRooms = roomRepository.count();
 
-        Map<LocalDate, Double> dailyOccupancy = new LinkedHashMap<>();
+        Map<LocalDate, Double> dailyOccupancy = new ConcurrentHashMap<>();
 
         for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
             LocalDate finalDate = date;

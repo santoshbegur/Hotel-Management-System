@@ -29,7 +29,8 @@ public class ReportController {
     public String getRevenueReport(@RequestParam String startDate,
                                    @RequestParam String endDate,
                                    Model model) {
-        Map<LocalDate, BigDecimal> reportData = reportService.generateDailyRevenueReport(LocalDate.parse(startDate), LocalDate.parse(endDate));
+        Map<LocalDate, BigDecimal> reportData =
+                reportService.generateDailyRevenueReport(LocalDate.parse(startDate), LocalDate.parse(endDate));
         model.addAttribute("reportData", reportData);
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
@@ -40,7 +41,8 @@ public class ReportController {
     public String getOccupancyReport(@RequestParam String startDate,
                                      @RequestParam String endDate,
                                      Model model) {
-        Map<LocalDate, Double> reportData = reportService.generateDailyOccupancyReport(LocalDate.parse(startDate), LocalDate.parse(endDate));
+        Map<LocalDate, Double> reportData =
+                reportService.generateDailyOccupancyReport(LocalDate.parse(startDate), LocalDate.parse(endDate));
         model.addAttribute("reportData", reportData);
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);

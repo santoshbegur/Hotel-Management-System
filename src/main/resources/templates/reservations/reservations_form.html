@@ -60,6 +60,47 @@
                     <input class="form-control" id="checkOut" th:field="*{checkOutDate}" th:type="date"/>
                 </div>
 
+                <!-- Room Details from first ReservationLine -->
+                <!-- Room -->
+                <div class="mb-2">
+                    <label class="form-label" for="room">Room</label>
+                    <select class="form-select" id="room" th:field="*{reservationLines[0].room.id}">
+                        <option value="">Select Room</option>
+                        <option th:each="r : ${rooms}"
+                                th:value="${r.id}"
+                                th:text="${r.roomNumber + ' (' + r.roomType.name + ')'}"
+                                th:selected="${reservation.reservationLines[0].room != null and r.id == reservation.reservationLines[0].room.id}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Type -->
+                <div class="mb-2">
+                    <label class="form-label" for="type">Room Type</label>
+                    <select class="form-select" id="type" th:field="*{reservationLines[0].room.id}">
+                        <option th:each="r : ${rooms}"
+                                th:selected="${reservation.reservationLines[0].room != null and r.id == reservation.reservationLines[0].room.id}"
+                                th:value="${r.id}"
+                                th:text="${r.roomType.name}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Nights -->
+                <div class="mb-2">
+                    <label class="form-label" for="nights">Nights</label>
+                    <input class="form-control" id="nights" type="number"
+                           th:field="*{reservationLines[0].nights}"/>
+                </div>
+
+                <!-- Price per Night -->
+                <div class="mb-2">
+                    <label class="form-label" for="pricePerNight">Price per Night</label>
+                    <input class="form-control" id="pricePerNight" type="number"
+                           th:field="*{reservationLines[0].pricePerNight}"/>
+                </div>
+
+
                 <!-- Total Amount -->
                 <div class="mb-2">
                     <label class="form-label" for="totalAmount">Total Amount</label>
