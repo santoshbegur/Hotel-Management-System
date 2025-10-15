@@ -1,0 +1,60 @@
+CREATE DATABASE  IF NOT EXISTS `hotel_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `hotel_db`;
+-- MySQL dump 10.13  Distrib 8.0.43, for Win64 (x86_64)
+--
+-- Host: localhost    Database: hotel_db
+-- ------------------------------------------------------
+-- Server version	9.4.0
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `housekeeping_event`
+--
+
+DROP TABLE IF EXISTS `housekeeping_event`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `housekeeping_event` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `room_id` bigint NOT NULL,
+  `status` varchar(255) NOT NULL DEFAULT 'PENDING',
+  `reported_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `handled_by` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_housekeeping_room` (`room_id`),
+  KEY `fk_housekeeping_staff` (`handled_by`),
+  CONSTRAINT `fk_housekeeping_room` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`),
+  CONSTRAINT `fk_housekeeping_staff` FOREIGN KEY (`handled_by`) REFERENCES `staff` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `housekeeping_event`
+--
+
+LOCK TABLES `housekeeping_event` WRITE;
+/*!40000 ALTER TABLE `housekeeping_event` DISABLE KEYS */;
+INSERT INTO `housekeeping_event` VALUES (1,1,'PENDING','2023-07-31 18:00:00',6),(2,2,'REPORTED','2023-08-01 19:15:00',6),(3,3,'NEEDS_REPAIR','2023-08-02 16:45:00',6),(4,4,'COMPLETED','2023-08-03 21:50:00',6),(5,5,'PENDING','2023-08-04 23:30:00',6),(6,6,'REPORTED','2024-01-09 20:00:00',6),(7,7,'NEEDS_REPAIR','2024-01-11 16:20:00',6),(8,8,'COMPLETED','2024-01-12 23:15:00',6),(9,9,'PENDING','2024-01-31 16:40:00',6),(10,10,'REPORTED','2024-02-02 19:00:00',6),(11,11,'NEEDS_REPAIR','2025-03-09 20:30:00',6),(12,12,'COMPLETED','2025-03-11 17:55:00',6),(13,13,'PENDING','2025-03-14 00:10:00',6),(14,14,'REPORTED','2025-03-31 15:45:00',6),(15,15,'NEEDS_REPAIR','2025-04-01 17:20:00',6),(16,16,'COMPLETED','2025-05-04 22:00:00',6),(17,17,'PENDING','2025-05-05 19:30:00',6),(18,18,'REPORTED','2025-05-06 18:50:00',6),(19,19,'NEEDS_REPAIR','2025-06-09 23:20:00',6),(20,20,'COMPLETED','2025-06-11 21:15:00',6);
+/*!40000 ALTER TABLE `housekeeping_event` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2025-10-15 15:38:57

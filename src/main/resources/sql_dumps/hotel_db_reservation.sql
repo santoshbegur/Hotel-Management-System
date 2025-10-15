@@ -1,0 +1,64 @@
+CREATE DATABASE  IF NOT EXISTS `hotel_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `hotel_db`;
+-- MySQL dump 10.13  Distrib 8.0.43, for Win64 (x86_64)
+--
+-- Host: localhost    Database: hotel_db
+-- ------------------------------------------------------
+-- Server version	9.4.0
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `reservation`
+--
+
+DROP TABLE IF EXISTS `reservation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `reservation` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `hotel_id` bigint DEFAULT NULL,
+  `customer_id` bigint DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `check_in_date` date DEFAULT NULL,
+  `check_out_date` date DEFAULT NULL,
+  `total_amount` decimal(38,2) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_by` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_reservation_hotel` (`hotel_id`),
+  KEY `fk_reservation_customer` (`customer_id`),
+  CONSTRAINT `fk_reservation_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
+  CONSTRAINT `fk_reservation_hotel` FOREIGN KEY (`hotel_id`) REFERENCES `hotel` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reservation`
+--
+
+LOCK TABLES `reservation` WRITE;
+/*!40000 ALTER TABLE `reservation` DISABLE KEYS */;
+INSERT INTO `reservation` VALUES (1,1,3,'BOOKED','2025-10-03','2025-10-04',6200.00,'2025-10-04 04:53:56','admin'),(2,2,7,'CHECKED_IN','2025-09-25','2025-09-28',10400.00,'2025-09-09 17:00:00','manager'),(3,3,12,'CHECKED_OUT','2025-09-10','2025-09-13',10000.00,'2025-10-04 04:53:56','user_li'),(4,4,5,'CHECKED_IN','2025-11-01','2025-11-06',40000.00,'2025-10-04 04:53:56','admin'),(5,5,9,'BOOKED','2025-09-02','2025-10-03',30000.00,'2025-10-04 04:53:56','admin'),(6,2,14,'CHECKED_IN','2025-09-24','2025-09-27',31200.00,'2025-09-12 01:55:00','manager'),(7,3,1,'BOOKED','2025-10-12','2025-10-15',6000.00,'2025-09-20 19:10:00','admin'),(8,6,4,'BOOKED','2025-10-20','2025-10-22',12000.00,'2025-09-18 16:25:00','admin'),(9,7,10,'CHECKED_OUT','2025-09-05','2025-09-09',48000.00,'2025-08-14 17:35:00','admin'),(10,8,6,'BOOKED','2025-11-03','2025-11-07',15000.00,'2025-09-24 02:45:00','admin'),(11,1,8,'CHECKED_IN','2025-09-26','2025-09-29',36000.00,'2025-09-13 15:20:00','admin'),(12,5,2,'BOOKED','2025-10-10','2025-10-14',17500.00,'2025-09-17 03:35:00','admin'),(13,9,11,'CANCELLED','2025-09-18','2025-09-20',59500.00,'2025-09-04 17:05:00','admin'),(14,10,13,'CHECKED_OUT','2025-09-01','2025-09-04',17000.00,'2025-08-11 21:25:00','admin'),(15,4,16,'BOOKED','2025-10-15','2025-10-19',36000.00,'2025-09-23 00:00:00','admin'),(16,6,17,'BOOKED','2025-10-08','2025-10-11',24000.00,'2025-09-18 04:50:00','admin'),(17,7,19,'CHECKED_IN','2025-09-27','2025-09-30',45000.00,'2025-09-12 23:15:00','admin'),(18,8,15,'CHECKED_OUT','2025-09-06','2025-09-09',34000.00,'2025-08-19 19:35:00','admin'),(19,9,20,'BOOKED','2025-10-25','2025-10-29',2300.00,'2025-09-24 16:00:00','user_daniel'),(20,10,18,'BOOKED','2025-10-18','2025-10-21',60000.00,'2025-09-22 01:15:00','admin'),(22,4,8,'BOOKED','2025-10-01','2025-10-05',16800.00,'2025-10-08 07:04:50','user_li'),(29,1,1,'BOOKED','2025-10-09','2025-10-10',2000.00,'2025-10-09 02:11:22','user_daniel'),(30,11,20,'BOOKED','2025-10-09','2025-10-10',40000.00,'2025-10-09 02:13:37','user_daniel');
+/*!40000 ALTER TABLE `reservation` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2025-10-15 15:38:57
