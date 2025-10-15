@@ -585,3 +585,9 @@ input[type=number] {
     vertical-align: middle;
 }
 
+:root {
+    --bs-primary: #0d6efd;
+    --bs-body-color: #212529;
+}
+
+

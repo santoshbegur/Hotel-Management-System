@@ -1,7 +1,7 @@
 package com.example.hotelmanagement.service;
 
 import com.example.hotelmanagement.entity.User;
-import com.example.hotelmanagement.repository.UserRepository;
+import com.example.hotelmanagement.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

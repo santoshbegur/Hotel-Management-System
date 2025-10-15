@@ -25,4 +25,9 @@ public class Customer {
     private String email;
 
     private String phone;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
 }
